@@ -1,39 +1,57 @@
+using GestionITM.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using GestionITM.Domain.Interfaces;
+using GestionITM.Infrastructure.Repositorios;
+using GestionITM.Infrastructure.Data; // agregado para usar ApplicationDbContext
+
+/*aqui le decimos al programa como ensamblar las piezas como si fueran piesas le lego
+ */
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddControllers();
+
+//Registrar los Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+//1. configuramos la cadena de conexion a la base de datos, en este caso se esta usando SQL Server,
+//pero se puede usar cualquier otra base de datos que sea compatible con Entity Framework Core
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+	//el AddDbContext registra nuestra seccion de BD en el sistema central de .NET
+	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+		?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
+/*con el UseSqlServer definimos nuestro motor de BD, En un posible Futuro donde querramos cambiar a otro motor
+*de BD como MySQL, PostgreSQL, etc. solo tendriamos que cambiar esta linea de codigo.
+*y el resto del codigo seguiria funcionando sin problemas
+*el GetConnectionString("DefaultConnection") se utiliza por seguridad
+*NOTA: las rutas de BD nunca se escriben directamente en el codigo, 
+*Se escriben en el archivo appsettings.json 
+*Entonces el GetConnectionString es una instruccion que va a obtener la ruta del .JSON que se guardo con el nombre DefaultConnection
+*
+*/
+
+/*2. Registramos el repositorio de estudiante para la inyeccion de dependencias, esto nos permite usar el repositorio en el controlador sin tener que preocuparnos por la instanciacion del mismo
+*AddScoped se usa para crear una instancia del repositorio por cada solicitud HTTP, esto es importante para evitar problemas de concurrencia y para asegurar que cada solicitud tenga su propia instancia del repositorio
+*Basicamente le estamos diciendo a .NET que siempre que un controlador le pida a la interfaz IEstudianteRepository, le entregue una instancia de la clase EstudianteRepository
+*Tú automaticamente estregale la instancia lista para usar la clase real que es en este caso EstudianteRepository
+*
+*/
+builder.Services.AddScoped<InterfaceEstudRepositorio, EstudianteRepository>();
+//Registrar ApplicationDbContext
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

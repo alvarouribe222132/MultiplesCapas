@@ -1,0 +1,82 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using GestionITM.Domain.Entities;
+using GestionITM.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using GestionITM.Infrastructure.Data;
+
+/*EntityFrameworkCore es el ORM (Object-Relational Mapper) oficial de Microsoft para .NET que permite las interacciones con bases de datos relacionales utilizando objetos de C#.
+ * es el encargado de crear las Tablas, las llaves primarias, las relaciones entre tablas, de hacer los INSERT, los SELECT, los UPDATE, los DELETE, etc. en la base de datos.
+ * este es el encargado del SQLServer
+ */
+
+namespace GestionITM.Infrastructure.Repositorios
+{
+	public class EstudianteRepository : InterfaceEstudRepositorio //llamando a la interfaz de estudiante para implementar los metodos que se van a usar en el controlador
+	{
+		//la clase EstudianteRepository es como si analogicamente fuera el Chef de la cosina el cual es el encargado
+		//de saber hacer los platos. por consiguiente debe conectarse a la base de datos para obtener los ingredientes (datos) necesarios para preparar los platos (respuestas a las solicitudes del controlador)
+		//Constructor 
+		private readonly ApplicationDbContext _context;
+
+		// Inyectamos el DbContext aqui para poder acceder a la base de datos
+		public EstudianteRepository(ApplicationDbContext context)
+		{
+			_context = context;
+		}
+
+		/*ApplicationDbContext
+		 * en lugar de escribir sentenciar manuales como el SELECT, el INSERT, el UPDATE, etc. en la base de datos, 
+		 * se utiliza el DbContext para interactuar con la base de datos de una manera mas sencilla y eficiente.
+		 * este se encarga de traducir las instrucciones de C# a SQL de forma segura y optimizada, evitando errores comunes como las inyecciones SQL y mejorando el rendimiento de las consultas.
+		 */
+
+		public async Task<IEnumerable<Estudiante>> ObtenerTodoAsync()
+		{
+			return await _context.Estudiantes.ToListAsync();
+			//el metodo .ToListAsync retorna una lista de todos los registros de estudiantes de la base de datos
+			//y los combierte en una lista de C#
+		}
+		public async Task<Estudiante?> ObtenerPorIdAsync(int id)
+		{
+			return await _context.Estudiantes.FindAsync(id);
+			//.FindAsync es un metodo ultra optimizado de EntityFrameworkCore
+			//que busca un estudiante por su llave primaria en este caso el ID en la base de datos
+		}
+		public async Task AgregarAsync(Estudiante estudiante)
+		{
+			await _context.Estudiantes.AddAsync(estudiante);
+			//.AddAsync le dice al EntityFrameworkCore "ey empiece a rastriar a este nuevo estudiante
+			//sin embargo no lo guarde en la Base de Datos aun
+			await _context.SaveChangesAsync();
+			//.SaveChangesAsync le dice al EntityFrameworkCore  ejecuta el comando INSERT
+			//guarda los cambios en la base de datos
+		}
+
+		public async Task ActualizarAsync(Estudiante estudiante)
+		{
+			_context.Estudiantes.Update(estudiante);
+			//.Update le dice al EntityFrameworkCore "ey este estudiante ya existe en la base de datos, actualizalo con esta nueva informacion"
+			await _context.SaveChangesAsync();
+			//.SaveChangesAsync le dice al EntityFrameworkCore  ejecuta el comando UPDATE
+			//guarda los cambios en la base de datos
+		}
+
+		public async Task EliminarAsync(int id)
+		{
+			var estudiante = await _context.Estudiantes.FindAsync(id);
+			if (estudiante != null)
+			{
+				_context.Estudiantes.Remove(estudiante);
+				//.Remove le dice al EntityFrameworkCore "ey este estudiante ya existe en la base de datos, eliminalo"
+				await _context.SaveChangesAsync();
+				//.SaveChangesAsync le dice al EntityFrameworkCore  ejecuta el comando DELETE
+				//guarda los cambios en la base de datos
+			}
+		}
+
+	}
+}

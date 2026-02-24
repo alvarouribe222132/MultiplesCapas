@@ -40,6 +40,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 *
 */
 builder.Services.AddScoped<InterfaceEstudRepositorio, EstudianteRepository>();
+builder.Services.AddScoped<ICursoRepository, CursoRepository>();
 //Registrar ApplicationDbContext
 
 var app = builder.Build();

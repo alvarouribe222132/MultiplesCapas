@@ -13,13 +13,13 @@ namespace GestionITM.Domain.Interfaces
 		//Task se usa como una promesa de que las funciones se utilizaran en un futuro
 		Task<IEnumerable<Estudiante>> ObtenerTodoAsync(); //obtener todos los estudiantes 
 	//IEnumerable es una coleccion generica de solo lectura. 
-		Task<Estudiante?> ObtenerPorIdAsync(int id); //obtener un estudiante por su ID> Estudiante
+		Task<Estudiante?> ObtenerPorIdAsync(int EstudianteId); //obtener un estudiante por su ID> Estudiante
 // Estudiante? tipo de referencia que acepta nulos
 //se usa por que si se buscara un ID de estudiante que no existe, se retornaria null
 //esto es para evitar el error null reference exception
 
 		Task AgregarAsync(Estudiante estudiante); //agregar un nuevo estudiante
 		Task ActualizarAsync(Estudiante estudiante); //actualizar un estudiante existente
-		Task EliminarAsync(int id); //eliminar un estudiante por su ID
+		Task EliminarAsync(int EstudianteId); //eliminar un estudiante por su ID
 	}
 }

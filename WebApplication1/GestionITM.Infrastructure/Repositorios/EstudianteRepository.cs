@@ -40,9 +40,9 @@ namespace GestionITM.Infrastructure.Repositorios
 			//el metodo .ToListAsync retorna una lista de todos los registros de estudiantes de la base de datos
 			//y los combierte en una lista de C#
 		}
-		public async Task<Estudiante?> ObtenerPorIdAsync(int id)
+		public async Task<Estudiante?> ObtenerPorIdAsync(int EstudianteId)
 		{
-			return await _context.Estudiantes.FindAsync(id);
+			return await _context.Estudiantes.FindAsync(EstudianteId);
 			//.FindAsync es un metodo ultra optimizado de EntityFrameworkCore
 			//que busca un estudiante por su llave primaria en este caso el ID en la base de datos
 		}
@@ -65,9 +65,9 @@ namespace GestionITM.Infrastructure.Repositorios
 			//guarda los cambios en la base de datos
 		}
 
-		public async Task EliminarAsync(int id)
+		public async Task EliminarAsync(int EstudianteId)
 		{
-			var estudiante = await _context.Estudiantes.FindAsync(id);
+			var estudiante = await _context.Estudiantes.FindAsync(EstudianteId);
 			if (estudiante != null)
 			{
 				_context.Estudiantes.Remove(estudiante);

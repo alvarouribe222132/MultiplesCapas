@@ -23,9 +23,9 @@ namespace GestionITM.Infrastructure.Repositorios
 		{
 			return await _context.Cursos.ToListAsync();
 		}
-		public async Task<Curso?> ObtenerPorIdAsync(int id)
+		public async Task<Curso?> ObtenerPorIdAsync(int IdCurso)
 		{
-			return await _context.Cursos.FindAsync(id);
+			return await _context.Cursos.FindAsync(IdCurso);
 		}
 		public async Task AgregarAsync(Curso curso)
 		{
@@ -39,9 +39,9 @@ namespace GestionITM.Infrastructure.Repositorios
 			await _context.SaveChangesAsync();
 		}
 
-		public async Task EliminarAsync(int id)
+		public async Task EliminarAsync(int IdCurso)
 		{
-			var curso = await _context.Cursos.FindAsync(id);
+			var curso = await _context.Cursos.FindAsync(IdCurso);
 			if (curso != null)
 			{
 				_context.Cursos.Remove(curso);

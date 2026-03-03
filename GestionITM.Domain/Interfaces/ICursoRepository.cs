@@ -8,10 +8,10 @@ namespace GestionITM.Domain.Interfaces
 	public interface ICursoRepository
 	{
 		Task<IEnumerable<Curso>> ObtenerTodoAsync();
-		Task<Curso?> ObtenerPorIdAsync(int id);
+		Task<Curso?> ObtenerPorIdAsync(int IdCurso);
 
 		Task AgregarAsync(Curso curso); //agregar un nuevo curso
 		Task ActualizarAsync(Curso curso); //actualizar un curso existente
-		Task EliminarAsync(int id); //eliminar el un curso por su ID
+		Task EliminarAsync(int IdCurso); //eliminar el curso por su ID
 	}
 }

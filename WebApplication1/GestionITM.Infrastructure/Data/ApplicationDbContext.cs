@@ -15,5 +15,9 @@ namespace GestionITM.Infrastructure.Data
 
 		public DbSet<Estudiante> Estudiantes { get; set; }
 		public DbSet<Curso> Cursos { get; set; }
+
+		public DbSet<Product> Products { get; set; }
+
+		public DbSet<Matricula> Matriculas { get; set; }
 	}
 }

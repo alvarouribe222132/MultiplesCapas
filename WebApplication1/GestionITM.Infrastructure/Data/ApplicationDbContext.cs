@@ -6,13 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestionITM.Infrastructure.Data
 {
+	//DvContext puente entre las entidades de dominio y la base de datos
 	public class ApplicationDbContext : DbContext 
 	{
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
 			: base(options)
 		{
 		}
-
+		//Cada Dbset representa una tabla en la base de datos
 		public DbSet<Estudiante> Estudiantes { get; set; }
 		public DbSet<Curso> Cursos { get; set; }
 

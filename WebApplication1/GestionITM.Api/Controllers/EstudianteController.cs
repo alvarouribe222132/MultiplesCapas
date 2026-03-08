@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using GestionITM.Domain.Entities;
-using GestionITM.Domain.Interfaces;
 using AutoMapper;
+using GestionITM.Domain.Interfaces;
+using GestionITM.Domain.Entities;
 using GestionITM.Domain.Dtos;
 
 //aqui estamos contrullendo un controlador en capas donde el controlador pertenece a la api, pero depende de las capas de dominio e infraestructura donde estas las entidades y interfaces para funcionar,
@@ -9,49 +9,57 @@ using GestionITM.Domain.Dtos;
 
 namespace GestionITM.Api.Controllers
 {
-	[Route ("api/controller")] // esta es la ruta base para acceder a este controlador, por ejemplo api/estudiante
+	[Route ("api/[controller]")] // esta es la ruta base para acceder a este controlador, por ejemplo api/estudiante
 	[ApiController]
 
-	public class EstudianteController  :ControllerBase
+	public class EstudianteController  : ControllerBase
 	{
-		private readonly IMapper _mapper;
-		private readonly InterfaceEstudRepositorio _repository;
-			public EstudianteController(InterfaceEstudRepositorio repository, IMapper mapper)
-			{
-				_repository = repository;
-				_mapper = mapper;
+		//1. ahora solo dependemos del la interfaz del servicio no del repositorio 
+
+		private readonly IEstudianteService _service;
+
+		//2. inyectamos el servicio en lugar del repositorio. El contructor ahora es mucha mas limpio
+		public EstudianteController(IEstudianteService service)
+		{ 
+			_service = service;
 		}
+
+
+
 		//Get api/estudiante
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Estudiante>>> GetEstudiante()
+		public async Task<ActionResult<IEnumerable<EstudianteDto>>> GetEstudiante()
 		{
-			var estudiantes = await _repository.ObtenerTodoAsync();
-			var estudiantesDto = _mapper.Map<IEnumerable<EstudianteDto>>(estudiantes);
+			var estudiantesDto = await _service.ObtenerTodosLosEstudiantesAsync();
 			return Ok(estudiantesDto); //devuelve el codigo 200 y la lista de estudiantes
 		}
 
 		//Get api/estudiante/5
-		[HttpGet("{id:int}")]
-		public async Task<ActionResult<Estudiante>> GetEstudiente(int EstudianteId)
+		[HttpGet("{EstudianteId:int}")]
+		public async Task<ActionResult<EstudianteDto>> GetEstudiente(int EstudianteId)
 		{
-			var estudiante = await _repository.ObtenerPorIdAsync(EstudianteId);
-			if (estudiante == null)
+			var estudianteDto = await _service.ObtenerPorIdAsync(EstudianteId);
+			if (estudianteDto == null)
 			{
 				return NotFound(new { message = $"Estudiante con el {EstudianteId} no fue encontrado" });
 			}
-			return Ok(estudiante);// devuelve el estudiante encontrado
+			return Ok(estudianteDto);// devuelve el estudiante encontrado
 		}
 
 		//Post api/estudiante
 		[HttpPost]
 
-		public async Task<ActionResult> PostEstudiante(Estudiante estudiante)
+		public async Task<ActionResult> PostEstudiante([FromBody]EstudianteCreateDto estudianteCreateDto)
 		{
-			await _repository.AgregarAsync(estudiante);
-			//Devuelve el codigo 201 y la ruta para acceder a la ubicacion con el nuevo estudiante creado
+			// 3. El servicio valida la logica (como el correo @itm) y guarda  
+			var resultado = await _service.RegistrarEstudianteAsync(estudianteCreateDto);
 
-			return CreatedAtAction(nameof(GetEstudiente), new { id = estudiante.EstudianteId }, estudiante);
-
+			if (!resultado)
+			{
+				return BadRequest("No se pudo registrar. Verifique que el correo sea institucional (@correo.itm.edu.co)");
+			}
+			//En un flujo Novel 5 real, el servicio podria devolver el estudiante creado con su id generado, y aqui podriamos devolver un CreatedAtAction con la ruta para obtener ese estudiante por id, pero por simplicidad solo devolvemos un Ok
+			return Ok(new {message = "Estudiante registrado con exito en el sistema" });
 		}
 	}
 }

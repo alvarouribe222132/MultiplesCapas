@@ -7,20 +7,16 @@ using AutoMapper;
 using GestionITM.Domain.Dtos;
 using GestionITM.Domain.Entities;
 using GestionITM.Domain.Interfaces;
-using GestionITM.Infrastructure.Repositorios;
-
-
-
 
 
 namespace GestionITM.Infrastructure.Services
 {
-	public class EstudianteServices : IEstudianteService
+	public class EstudianteServices : IEstudianteService  //la interfaz IEstudianteService define los métodos que esta clase debe implementar, este se encarga de buscar todo lo neceesario para preparar todo los alimentos
 	{
-		private readonly IEstudianteService _repository;
-		private readonly IMapper _mapper;
+		private readonly InterfaceEstudRepositorio _repository;
+		private readonly IMapper _mapper;  //El IMapper es el asistente de la interfaz para poder pasar los datos crudos hacia los platos o solicitudes necesarias
 
-		public EstudianteServices(IEstudianteService repository, IMapper mapper)
+		public EstudianteServices(InterfaceEstudRepositorio repository, IMapper mapper)
 		{
 			_repository = repository;
 			_mapper = mapper;
@@ -37,7 +33,7 @@ namespace GestionITM.Infrastructure.Services
 			//Reglas de negocio para validadr el estudiante Nivel 5
 			//No permitimos correo que no sea del dominio itm.edu.co
 
-			if (!estudianteCreateDto.Correo.EndsWith("@itm.edu.co"))
+			if (!estudianteCreateDto.Correo.EndsWith("@correo.itm.edu.co"))
 			{
 				return false; //No se puede registrar el estudiante
 			}
@@ -48,5 +44,15 @@ namespace GestionITM.Infrastructure.Services
 
 			return true; // Estudiante registrado exitosamente
 		}
+
+		public async Task<EstudianteDto?> ObtenerPorIdAsync(int EstudianteId)
+		{
+			var estudiante = await _repository.ObtenerPorIdAsync(EstudianteId);
+			if (estudiante == null)
+			{
+				return null; // No se encontró el estudiante
+			}
+			return _mapper.Map<EstudianteDto>(estudiante);
+		} 
 	}
 }

@@ -1,10 +1,12 @@
 using AutoMapper;
-using GestionITM.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+using GestionITM.Api.Mappings; // agregado para usar ApplicationDbContext
 using GestionITM.Domain.Interfaces;
+using GestionITM.Infrastructure;
 using GestionITM.Infrastructure.Services;
 using GestionITM.Infrastructure.Repositorios;
-using GestionITM.Infrastructure.Data; // agregado para usar ApplicationDbContext
+using GestionITM.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+
 
 /*aqui le decimos al programa como ensamblar las piezas como si fueran piesas le lego
  */
@@ -42,8 +44,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 *
 */
 builder.Services.AddScoped<InterfaceEstudRepositorio, EstudianteRepository>();
+builder.Services.AddScoped<IEstudianteService, EstudianteServices>();
 builder.Services.AddScoped<ICursoRepository, CursoRepository>();
 //Registrar ApplicationDbContext
+
+//AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 

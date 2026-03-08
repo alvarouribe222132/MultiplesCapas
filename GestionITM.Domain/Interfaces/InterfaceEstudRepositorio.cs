@@ -21,5 +21,6 @@ namespace GestionITM.Domain.Interfaces
 		Task AgregarAsync(Estudiante estudiante); //agregar un nuevo estudiante
 		Task ActualizarAsync(Estudiante estudiante); //actualizar un estudiante existente
 		Task EliminarAsync(int EstudianteId); //eliminar un estudiante por su ID
+
 	}
 }

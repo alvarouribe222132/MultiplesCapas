@@ -1,6 +1,8 @@
+using AutoMapper;
 using GestionITM.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using GestionITM.Domain.Interfaces;
+using GestionITM.Infrastructure.Services;
 using GestionITM.Infrastructure.Repositorios;
 using GestionITM.Infrastructure.Data; // agregado para usar ApplicationDbContext
 
@@ -52,7 +54,9 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+

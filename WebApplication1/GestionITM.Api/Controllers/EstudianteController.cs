@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GestionITM.Domain.Entities;
 using GestionITM.Domain.Interfaces;
+using AutoMapper;
+using GestionITM.Domain.Dtos;
 
 //aqui estamos contrullendo un controlador en capas donde el controlador pertenece a la api, pero depende de las capas de dominio e infraestructura donde estas las entidades y interfaces para funcionar,
 //esto es una buena practica de diseño de software porque nos permite separar las responsabilidades y hacer que el codigo sea mas mantenible y escalable
@@ -12,21 +14,24 @@ namespace GestionITM.Api.Controllers
 
 	public class EstudianteController  :ControllerBase
 	{
+		private readonly IMapper _mapper;
 		private readonly InterfaceEstudRepositorio _repository;
-			public EstudianteController(InterfaceEstudRepositorio repository)
+			public EstudianteController(InterfaceEstudRepositorio repository, IMapper mapper)
 			{
 				_repository = repository;
-		     }
+				_mapper = mapper;
+		}
 		//Get api/estudiante
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Estudiante>>> GetEstudiante()
 		{
 			var estudiantes = await _repository.ObtenerTodoAsync();
-			return Ok(estudiantes); //devuelve el codigo 200 y la lista de estudiantes
+			var estudiantesDto = _mapper.Map<IEnumerable<EstudianteDto>>(estudiantes);
+			return Ok(estudiantesDto); //devuelve el codigo 200 y la lista de estudiantes
 		}
 
 		//Get api/estudiante/5
-		[HttpGet("{id}")]
+		[HttpGet("{id:int}")]
 		public async Task<ActionResult<Estudiante>> GetEstudiente(int EstudianteId)
 		{
 			var estudiante = await _repository.ObtenerPorIdAsync(EstudianteId);

@@ -15,7 +15,7 @@ using GestionITM.Infrastructure.Data;
 
 namespace GestionITM.Infrastructure.Repositorios
 {
-	public class EstudianteRepository : InterfaceEstudRepositorio //llamando a la interfaz de estudiante para implementar los metodos que se van a usar en el controlador
+	public class EstudianteRepository : InterfaceEstudRepositorio //llamando a la interfaz de estudiante para implementar TODOS los metodos que se van a usar en el controlador. si no se utilizan todos va a causar problemas
 	{
 		//la clase EstudianteRepository es como si analogicamente fuera el Chef de la cosina el cual es el encargado
 		//de saber hacer los platos. por consiguiente debe conectarse a la base de datos para obtener los ingredientes (datos) necesarios para preparar los platos (respuestas a las solicitudes del controlador)
@@ -76,6 +76,13 @@ namespace GestionITM.Infrastructure.Repositorios
 				//.SaveChangesAsync le dice al EntityFrameworkCore  ejecuta el comando DELETE
 				//guarda los cambios en la base de datos
 			}
+		}
+
+		public async Task<bool> ExistePorDocumentoAsync(string documento)
+		{
+			return await _context.Estudiantes.AnyAsync(e => e.Documento == documento);
+			//.AnyAsync le dice al EntityFrameworkCore "ey revisa si existe algun estudiante en la base de datos que tenga este documento"
+			//retorna true si existe, false si no existe
 		}
 
 	}

@@ -22,5 +22,7 @@ namespace GestionITM.Domain.Interfaces
 		Task ActualizarAsync(Estudiante estudiante); //actualizar un estudiante existente
 		Task EliminarAsync(int EstudianteId); //eliminar un estudiante por su ID
 
+		Task<bool> ExistePorDocumentoAsync(string documento); //verificar si existe un estudiante por su documento de identidad
+
 	}
 }

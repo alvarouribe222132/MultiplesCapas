@@ -24,5 +24,7 @@ namespace GestionITM.Domain.Entities
 		[MaxLength(20)]
 		public string Telefono { get; set; } = string.Empty;
 
+        [MaxLength(20)]
+        public string Documento { get; set; } = string.Empty;
 	}
 }

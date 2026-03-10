@@ -1,4 +1,5 @@
 ﻿
+using GestionITM.Domain.Exceptions;
 using GestionITM.Domain.Modelos;
 using Microsoft.Extensions.Logging;
 using System;
@@ -43,11 +44,26 @@ namespace GestionITM.Api.Middleware
 		private async Task HandleExceptionAsync(HttpContext context, Exception ex)
 		{
 			context.Response.ContentType = "application/json"; //le decimos al cliente que la respuesta sera en formato JSON
-			context.Response.StatusCode = (int)HttpStatusCode.InternalServerError; //codigo de error 500
+
+			var statusCode = ex switch
+			{
+				NotFoundException => HttpStatusCode.NotFound, //404
+				BadRequestException => HttpStatusCode.BadRequest, //400
+				UnauthorizedException => HttpStatusCode.Unauthorized, //401
+				ConflictException => HttpStatusCode.Conflict, //409
+				_ => HttpStatusCode.InternalServerError //500 para cualquier otro error no manejado especificamente
+			};
+
+			context.Response.StatusCode = (int)HttpStatusCode.InternalServerError; //codigo de error
+
+			var message = ex is AppException
+				? ex.Message //Mensaje de la excepcion personalizada (NotFound, BadRequest, etc)
+				: "Ocurrio un error inesperado. Por favor intente nuevamente mas tarde."; //Mensaje generico para errores no manejados especificamente
+
 			var response = new ErrorResponse
 			{
 				StatusCode = context.Response.StatusCode,
-				Message = "Ocurrio un error inesperado. Por favor intente nuevamente mas tarde.",
+				Message = message,
 				Details = _env.IsDevelopment() ? ex.StackTrace?.ToString() : null //solo muestra en desarrollo NO en Produccion
 			};
 

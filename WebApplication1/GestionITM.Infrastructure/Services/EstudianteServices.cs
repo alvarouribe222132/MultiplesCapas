@@ -7,6 +7,7 @@ using AutoMapper;
 using GestionITM.Domain.Dtos;
 using GestionITM.Domain.Entities;
 using GestionITM.Domain.Interfaces;
+using GestionITM.Domain.Exceptions;
 
 
 namespace GestionITM.Infrastructure.Services
@@ -48,11 +49,21 @@ namespace GestionITM.Infrastructure.Services
 		public async Task<EstudianteDto?> ObtenerPorIdAsync(int EstudianteId)
 		{
 			var estudiante = await _repository.ObtenerPorIdAsync(EstudianteId);
+
 			if (estudiante == null)
-			{
-				return null; // No se encontró el estudiante
-			}
-			return _mapper.Map<EstudianteDto>(estudiante);
+				throw new NotFoundException($"No se encontró el estudiante con ID {EstudianteId}"); // 404
+		
+			return _mapper.Map<EstudianteDto>(estudiante); // se convierte la Entidad en Dto
 		} 
+
+
+		public async Task CrearAsync(EstudianteCreateDto dto)
+
+		{
+			var existe = await _repository.ExistePorDocumentoAsync(dto.Documento);
+
+			if (existe)
+				throw new ConflictException($"Ya existe un estudiante con el documento {dto.Documento}"); // 409
+		}
 	}
 }

@@ -2,10 +2,12 @@ using AutoMapper;
 using GestionITM.Api.Mappings; // agregado para usar ApplicationDbContext
 using GestionITM.Domain.Interfaces;
 using GestionITM.Infrastructure;
+using GestionITM.Api.Middleware;
 using GestionITM.Infrastructure.Services;
 using GestionITM.Infrastructure.Repositorios;
 using GestionITM.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+
 
 
 /*aqui le decimos al programa como ensamblar las piezas como si fueran piesas le lego
@@ -54,6 +56,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleWare>(); //Agregamos el middleware de excepciones para manejar los errores de manera centralizada (ESCUDO DE PROTECCION CONTRA ERRORES)
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();

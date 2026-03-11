@@ -3,12 +3,15 @@ using AutoMapper;
 using GestionITM.Domain.Interfaces;
 using GestionITM.Domain.Entities;
 using GestionITM.Domain.Dtos;
+using Microsoft.AspNetCore.Authorization;
+
 
 //aqui estamos contrullendo un controlador en capas donde el controlador pertenece a la api, pero depende de las capas de dominio e infraestructura donde estas las entidades y interfaces para funcionar,
 //esto es una buena practica de diseño de software porque nos permite separar las responsabilidades y hacer que el codigo sea mas mantenible y escalable
 
 namespace GestionITM.Api.Controllers
 {
+	[Authorize]//ESTE es el candado del 2 filtro de seguridad
 	[Route ("api/[controller]")] // esta es la ruta base para acceder a este controlador, por ejemplo api/estudiante
 	[ApiController]
 

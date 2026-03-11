@@ -1,5 +1,0 @@
-<Solution>
-  <Project Path="GestionITM.Domain/GestionITM.Domain.csproj" />
-  <Project Path="WebApplication1/GestionITM.Api/GestionITM.Api.csproj" />
-  <Project Path="WebApplication1/GestionITM.Infrastructure/GestionITM.Infrastructure.csproj" />
-</Solution>

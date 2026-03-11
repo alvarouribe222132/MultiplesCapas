@@ -7,6 +7,9 @@ using GestionITM.Infrastructure.Services;
 using GestionITM.Infrastructure.Repositorios;
 using GestionITM.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 
@@ -25,6 +28,8 @@ builder.Services.AddSwaggerGen();
 
 //1. configuramos la cadena de conexion a la base de datos, en este caso se esta usando SQL Server,
 //pero se puede usar cualquier otra base de datos que sea compatible con Entity Framework Core
+
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	//el AddDbContext registra nuestra seccion de BD en el sistema central de .NET
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
@@ -38,6 +43,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 *Entonces el GetConnectionString es una instruccion que va a obtener la ruta del .JSON que se guardo con el nombre DefaultConnection
 *
 */
+
+//configuracion de JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	.AddJwtBearer(options => { 		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuer = true,
+			ValidateAudience = true,
+			ValidateLifetime = true,
+			ValidateIssuerSigningKey = true,
+			ValidIssuer = builder.Configuration["Jwt:Issuer"],
+			ValidAudience = builder.Configuration["Jwt:Audience"],
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+		};
+	});
 
 /*2. Registramos el repositorio de estudiante para la inyeccion de dependencias, esto nos permite usar el repositorio en el controlador sin tener que preocuparnos por la instanciacion del mismo
 *AddScoped se usa para crear una instancia del repositorio por cada solicitud HTTP, esto es importante para evitar problemas de concurrencia y para asegurar que cada solicitud tenga su propia instancia del repositorio
@@ -62,6 +81,9 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+//Bloque de activiacion de autenticacion y autorizacion, esto es importante para proteger las rutas de nuestra API y asegurar que solo los usuarios autorizados puedan acceder a ellas
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 app.Run();

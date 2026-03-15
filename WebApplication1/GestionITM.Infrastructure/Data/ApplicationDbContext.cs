@@ -20,5 +20,7 @@ namespace GestionITM.Infrastructure.Data
 		public DbSet<Product> Products { get; set; }
 
 		public DbSet<Matricula> Matriculas { get; set; }
+
+		public DbSet<Profesor> Profesors { get; set; }
 	}
 }

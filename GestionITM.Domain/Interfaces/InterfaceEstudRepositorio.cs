@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace GestionITM.Domain.Interfaces
 {
-	public interface InterfaceEstudRepositorio
+	public interface InterfaceEstudRepositorio //esta es la que habla con la BD
 	{
-		//Definimos las operaciones asincronas (Task) para manejar estudiantes 
+		//Definimos las operaciones asincronas (Task) para manejar estudiantes  en la BD
 		//Task se usa como una promesa de que las funciones se utilizaran en un futuro
 		Task<IEnumerable<Estudiante>> ObtenerTodoAsync(); //obtener todos los estudiantes 
 	//IEnumerable es una coleccion generica de solo lectura. 

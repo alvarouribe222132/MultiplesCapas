@@ -64,6 +64,35 @@ namespace GestionITM.Api.Controllers
 			//En un flujo Novel 5 real, el servicio podria devolver el estudiante creado con su id generado, y aqui podriamos devolver un CreatedAtAction con la ruta para obtener ese estudiante por id, pero por simplicidad solo devolvemos un Ok
 			return Ok(new {message = "Estudiante registrado con exito en el sistema" });
 		}
+
+		[HttpPut("{EstudianteId:int}")]
+		public async Task<ActionResult> PutEstudiante(int EstudianteId, [FromBody]EstudianteUpdateDto estudianteUpdateDto)
+		{
+			if (EstudianteId!= estudianteUpdateDto.EstudianteId)
+			{
+				return BadRequest("El ID ingresado no coincide con el ID del Estudiante. ");
+			}
+
+			var actualiza = await _service.ActualizarEstudianteAsync(estudianteUpdateDto);
+			if (!actualiza)
+			{
+				return NotFound(new { message = $"El Estudiante con id {EstudianteId} no existe. " });
+			}
+			return Ok(new { message = "Estudiante actualizado Correctamente" });
+		}
+
+		[HttpDelete("{EstudianteId:int}")]
+		public async Task<ActionResult> DeleteEstudiante(int EstudianteId)
+		{
+
+			var eliminado = await _service.DeleteEstudianteAsync(EstudianteId);
+
+			if (!eliminado)
+			{
+				return NotFound(new { message = $"El Estudiante con id {EstudianteId} no existe. " });
+			}
+			return Ok(new { message = "Estudiante Eliminado Correctamente" });
+		}
 	}
 }
 

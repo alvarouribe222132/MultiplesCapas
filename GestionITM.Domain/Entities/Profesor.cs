@@ -5,15 +5,16 @@ using System.Text;
 
 namespace GestionITM.Domain.Entities
 {
+	// las Data Annotations son instrucciones que le damos a C# sobre la propiedad que viene inmediatamente despues de declarar el []
 	public class Profesor
 	{
 		[Key] public int ProfesorId { get; set; } //al dejar el [key] EF Core deja este campo por defecto autoincremental. es decir que en el POST no necesito ingresar un id
 
-		[Required]
-		[MaxLength(100)]
+		[Required] //aqui le decimos que el campo no puede ser nulo ni vacio. de lo contrario la API rechazará la peticion. 
+		[MaxLength(100)] 
 		public string Name { get; set; } = string.Empty;
 
-		[EmailAddress]
+		[EmailAddress] //para validar que se tenga el formato correcto (@dominio)
 		[MaxLength(200)]
 		public string Correo { get; set; } = string.Empty;
 
@@ -25,8 +26,9 @@ namespace GestionITM.Domain.Entities
 		[MaxLength(20)]
 		public string Documento { get; set; } = string.Empty;
 
-		public string Especialidad { get; set; } = string.Empty;
 		[Required]
+		public string Especialidad { get; set; } = string.Empty;
+		
 
 	}
 }

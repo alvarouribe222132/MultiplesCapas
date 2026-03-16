@@ -67,6 +67,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<InterfaceEstudRepositorio, EstudianteRepository>();
 builder.Services.AddScoped<IEstudianteService, EstudianteServices>();
 builder.Services.AddScoped<ICursoRepository, CursoRepository>();
+builder.Services.AddScoped<IProfesorService, ProfesorServices>();
+builder.Services.AddScoped<InterfaceProfeRepositorio, ProfesorRepository>();
 //Registrar ApplicationDbContext
 
 //AutoMapper

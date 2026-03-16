@@ -30,6 +30,11 @@ namespace GestionITM.Infrastructure.Services
 		}
 		public async Task<bool> RegistrarProfesorAsync(ProfesorCreateDto profesorCreateDto)
 		{
+			//PRUEBA - Lanza excepción si el nombre es "Error"
+			if (profesorCreateDto.NombreCompleto.Trim().ToLower() == "error")
+			{
+				throw new Exception("Error de prueba");
+			}
 
 			//Reglas de negocio para validadr el Profesor Nivel 5
 			//No permitimos correo que no sea del dominio itm.edu.co
@@ -37,7 +42,17 @@ namespace GestionITM.Infrastructure.Services
 			{
 				return false;
 			}
-		
+
+			if (string.IsNullOrWhiteSpace(profesorCreateDto.Especialidad))
+			{
+				throw new ArgumentException("La especialidad del profesor no puede estar vacía.");
+			}
+
+			if (profesorCreateDto.Especialidad.Trim().ToLower() == "arquitectura")
+			{
+				Console.WriteLine("Perfil Senior Detectado");
+			}
+
 			var existe = await _repository.ExistePorDocumentoAsync(profesorCreateDto.Documento);
 
 			if (existe)

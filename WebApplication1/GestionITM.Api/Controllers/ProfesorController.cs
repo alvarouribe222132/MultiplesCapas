@@ -8,7 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace GestionITM.Api.Controllers
 {
-	[Authorize]//ESTE es el candado del 2 filtro de seguridad
+	//[Authorize]//ESTE es el candado del 2 filtro de seguridad el cual se muestra en el Swagger.
 	[Route("api/[controller]")] // esta es la ruta base para acceder a este controlador, por ejemplo api/estudiante
 	[ApiController]
 	public class ProfesorController : ControllerBase

@@ -11,6 +11,8 @@ namespace GestionITM.Api.Mappings
 		{
 			CreateMap<Estudiante, EstudianteDto>();
 			CreateMap<EstudianteCreateDto, Estudiante>();
+			CreateMap<Profesor, ProfesorDto>();
+			CreateMap<ProfesorCreateDto, Profesor>();
 		
 		}
 	}

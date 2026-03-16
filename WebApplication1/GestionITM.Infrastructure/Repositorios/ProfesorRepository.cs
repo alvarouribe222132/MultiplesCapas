@@ -88,7 +88,7 @@ namespace GestionITM.Infrastructure.Repositorios
 		public async Task<IEnumerable<Profesor>> ObtenerProfesoresPorEspecialidadAsync(string Especialidad)
 		{
 			return await _context.Profesors
-				.Where(p => p.Especialidad == Especialidad)   //esto seria como un Select en SQl
+				.Where(p => p.Especialidad == Especialidad)   //esto seria como un Select en SQl donde se filtra por el tipo de especialidad
 				.ToListAsync();
 		}
 
@@ -96,6 +96,9 @@ namespace GestionITM.Infrastructure.Repositorios
 		public async Task<Profesor?> ObtenerPorDocumentoAsync(string Documento)
 		{
 			return await _context.Profesors.FirstOrDefaultAsync(P => P.Documento == Documento);
+			//aqui FirstOrDefaultAsync filtra la primera coincidencia con el documento 
+			//si no encuentra ninguno retornara NUll por eso la instruccion Task<Profesor?> tiene el simbolo ?
+			//es como si se hiciera un Select Top 1 * From Profesors Where Documento = 'xxxx'
 		}
 	}
 }

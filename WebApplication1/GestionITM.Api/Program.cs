@@ -1,7 +1,5 @@
-using AutoMapper;
 using GestionITM.Api.Mappings; // agregado para usar ApplicationDbContext
 using GestionITM.Domain.Interfaces;
-using GestionITM.Infrastructure;
 using GestionITM.Api.Middleware;
 using GestionITM.Infrastructure.Services;
 using GestionITM.Infrastructure.Repositorios;
@@ -9,9 +7,9 @@ using GestionITM.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
-
+using System.Text; //Para usar Encoding.UTF8.GetBytes
+using System.Reflection;
+using Microsoft.OpenApi; //Necesario para Assembly.GetExecutingAssembly() en la configuracion del Swagger
 
 /*aqui le decimos al programa como ensamblar las piezas como si fueran piesas le lego
  */
@@ -19,12 +17,30 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
 
 //Registrar los Swagger
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+	c.SwaggerDoc("v1", new OpenApiInfo 
+	{ 
+		Title = "GestionITM API", 
+		Version = "v1" 
+		
+	});
+
+	//Instruccion Nueva
+	//Localice el archivo xml generado en la carpeta de binario (bin) despues de compilar el proyecto. El nombre del archivo suele ser el mismo que el nombre del proyecto, seguido de .xml (por ejemplo, GestionITM.API.xml)
+
+	var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+	var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+	//Le dice al Swagger que incluya los comentarios XML para mejorar la documentacion de la API. Esto es especialmente util para descubrir los endpoints, parametros y respuestas.
+	c.IncludeXmlComments(xmlPath);
+});
 
 //1. configuramos la cadena de conexion a la base de datos, en este caso se esta usando SQL Server,
 //pero se puede usar cualquier otra base de datos que sea compatible con Entity Framework Core
@@ -32,8 +48,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	//el AddDbContext registra nuestra seccion de BD en el sistema central de .NET
-	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
-		?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
+	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+		//?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 /*con el UseSqlServer definimos nuestro motor de BD, En un posible Futuro donde querramos cambiar a otro motor
 *de BD como MySQL, PostgreSQL, etc. solo tendriamos que cambiar esta linea de codigo.
 *y el resto del codigo seguiria funcionando sin problemas
@@ -54,6 +70,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			ValidateIssuerSigningKey = true,
 			ValidIssuer = builder.Configuration["Jwt:Issuer"],
 			ValidAudience = builder.Configuration["Jwt:Audience"],
+
 			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
 		};
 	});
@@ -67,6 +84,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<InterfaceEstudRepositorio, EstudianteRepository>();
 builder.Services.AddScoped<IEstudianteService, EstudianteServices>();
 builder.Services.AddScoped<ICursoRepository, CursoRepository>();
+
+//AddScoped crea una instancia para cada solicitud HTTP, pero usa la misma instancia en las otras llamadas dentro de la misma petición web
 builder.Services.AddScoped<IProfesorService, ProfesorServices>();
 builder.Services.AddScoped<InterfaceProfeRepositorio, ProfesorRepository>();
 //Registrar ApplicationDbContext
@@ -89,7 +108,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
 

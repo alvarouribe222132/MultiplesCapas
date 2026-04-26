@@ -3,6 +3,7 @@ using GestionITM.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using GestionITM.Domain.Modelos;
 
 namespace GestionITM.Domain.Interfaces
 {
@@ -20,6 +21,9 @@ namespace GestionITM.Domain.Interfaces
 
 		Task<bool> ActualizarProfesorAsync(ProfesorUpdateDto profesorUpdateDto);
 		Task<bool> DeleteProfesorAsync(int profesorId);
-		
+
+		//Nivel 5: operacion optimizada con IQueryable para paginacion y filtros avanzados
+		Task<PagedResults<ProfesorDto>> ObtenerProfesoresPaginadosAsync(ProfesorFilterDto filter);
+
 	}
 }

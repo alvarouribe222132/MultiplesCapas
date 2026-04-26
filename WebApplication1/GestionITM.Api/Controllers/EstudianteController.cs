@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GestionITM.Api.Controllers
 {
-	[Authorize]//ESTE es el candado del 2 filtro de seguridad
+	[Authorize]//ESTE es el candado del 2 filtro de seguridad a traves de un Token 
 	[Route ("api/[controller]")] // esta es la ruta base para acceder a este controlador, por ejemplo api/estudiante
 	[ApiController]
 
@@ -33,6 +33,7 @@ namespace GestionITM.Api.Controllers
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<EstudianteDto>>> GetEstudiante()
 		{
+		//El servicio ya nos devuelve los DTOs mapeados
 			var estudiantesDto = await _service.ObtenerTodosLosEstudiantesAsync();
 			return Ok(estudiantesDto); //devuelve el codigo 200 y la lista de estudiantes
 		}
@@ -41,6 +42,8 @@ namespace GestionITM.Api.Controllers
 		[HttpGet("{EstudianteId:int}")]
 		public async Task<ActionResult<EstudianteDto>> GetEstudiente(int EstudianteId)
 		{
+		//Nota: Aqui se podra agregar logica en el Servicio para manejar el Null
+		//o mapear qui si el servicio devuelve la entidad (pero mejor en el servicio)
 			var estudianteDto = await _service.ObtenerPorIdAsync(EstudianteId);
 			if (estudianteDto == null)
 			{

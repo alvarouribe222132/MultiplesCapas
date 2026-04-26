@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GestionITM.Domain.Entities;
 using GestionITM.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using GestionITM.Infrastructure;
 using GestionITM.Infrastructure.Data;
 
 namespace GestionITM.Infrastructure.Repositorios

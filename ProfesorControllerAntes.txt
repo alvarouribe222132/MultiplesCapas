@@ -1,0 +1,125 @@
+using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using GestionITM.Domain.Interfaces;
+using GestionITM.Domain.Entities;
+using GestionITM.Domain.Dtos;
+using Microsoft.AspNetCore.Authorization;
+
+namespace GestionITM.Api.Controllers
+{
+	[Authorize]//ESTE es el candado del 2 filtro de seguridad el cual se muestra en el Swagger.
+	[Route("api/[controller]")] // esta es la ruta base para acceder a este controlador, por ejemplo api/estudiante
+	[ApiController]
+	public class ProfesorController : ControllerBase
+	{
+		private readonly IProfesorService _service;
+
+		public ProfesorController(IProfesorService service)
+		{
+			_service = service;
+		}
+
+		// GET: Api/Profesor
+		[HttpGet]
+		public async Task<ActionResult<IEnumerable<ProfesorDto>>> GetProfesor()
+		{
+			var profesoresDto = await _service.ObtenerTodosLosProfesoresAsync();
+			return Ok(profesoresDto); //devuelve el codigo 200 y la lista de los profesores 
+		}
+
+		//Get: Api/Profesor/Paginado
+		//recibimos los datos por URL (query string) para facilitar la paginacion y filtros
+		[HttpGet("paginado")]
+		public async Task<ActionResult> GetPaginado([FromQuery] ProfesorFilterDto filterDto)
+		{
+			//El framework intenta llenar el objeto filtro con los datos que vienen en la query string. Si no se envía algo, se usan los valores por defecto definidos en el DTO.
+			var resultado = await _service.ObtenerProfesoresPaginadosAsync(ProfesorFilterDto, filterDto);
+			return Ok(resultado); //devuelve el codigo 200 y el resultado paginado con los profesores segun los filtros
+		}
+		{
+		
+			var profesoresDto = await _service.ObtenerProfesoresPorEspecialidadAsync(filterDto);
+
+			if (!profesoresDto.Any())
+			{
+				return NotFound(new { message = $"No se encontrarion prodesores para la especialidad {Especialidad}" });
+			}
+			return Ok(profesoresDto); //devuelve el codigo 200 y la lista de profesores por especialidad
+		}
+
+		//Get api/profesores/5
+		[HttpGet("{ProfesorId:int}")]
+
+		public async Task<ActionResult<ProfesorDto>> GetProfesorporId(int ProfesorId)
+		{
+			var ProfesorDto = await _service.ObtenerPorIdAsync(ProfesorId);
+			if (ProfesorDto == null)
+			{
+				return NotFound(new { message = $"El Profesor con el {ProfesorId} no fue encontrado" });
+			}
+			return Ok(ProfesorDto);// devuelve el profesor encontrado
+		}
+
+		[HttpGet("documento/{Documento}")]
+		public async Task<ActionResult<ProfesorDto>> GetProfesorPorDocumentoAsync(string Documento)
+		{
+			var ProfesorDto = await _service.ObtenerPorDocumentoAsync(Documento);
+
+			if (ProfesorDto == null)
+				
+			{
+				return NotFound(new { message = $"El Profesor con el {Documento} no fue encontrado" });
+			}
+			return Ok(ProfesorDto);// devuelve el profesor encontrado
+		}
+
+
+		//Post api/Profesor
+		[HttpPost]
+
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		
+		public async Task<ActionResult> PostProfesor([FromBody] ProfesorCreateDto profesorCreateDto)
+		{
+			var resultado = await _service.RegistrarProfesorAsync(profesorCreateDto);
+
+			if (!resultado)
+			{
+				return BadRequest("No se pudo registrar. Verifique los datos ingresados (CC, Especialidad)");
+			}
+			//En un flujo Nivel 5 real, el servicio podria devolver el profesor creado con su id generado, y aqui podriamos devolver un CreatedAtAction con la ruta para obtener ese profesor por id, pero por simplicidad solo devolvemos un Ok
+			return Ok(new { message = "Profesor registrado con exito en el sistema" });
+		}
+
+		[HttpPut("{ProfesorId:int}")]
+		public async Task<ActionResult> PutProfesor( int ProfesorId, [FromBody] ProfesorUpdateDto profesorUpdateDto)
+		{
+			if (ProfesorId != profesorUpdateDto.ProfesorId)
+			{
+				return BadRequest("El ID ingresado no coincide con el ID del profesor. ");
+			}
+
+			var actualiza = await _service.ActualizarProfesorAsync(profesorUpdateDto);
+			if (!actualiza)
+			{
+				return NotFound(new { message = $"El profesorr con id {ProfesorId} no existe. " });
+			}
+			return Ok(new { message = "Profesor actualizado Correctamente" });
+		}
+
+		[HttpDelete("{ProfesorId:int}")]
+		public async Task<ActionResult> DeleteProfesor(int ProfesorId)
+		{
+
+			var eliminado = await _service.DeleteProfesorAsync(ProfesorId);
+
+			if (!eliminado)
+			{
+				return NotFound(new { message = $"El profesor con id {ProfesorId} no existe. " });
+			}
+			return Ok(new { message = "Profesor Eliminado Correctamente" });
+		}
+	}
+}

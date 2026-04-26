@@ -8,7 +8,7 @@ namespace GestionITM.Domain.Dtos
 {
 	public class ProfesorDto
 	{
-
+		//campos que el usuario tiene permitido enviar
 		public int ProfesorId { get; set; }
 		public string NombreCompleto { get; set; } = string.Empty;
 		public string Correo { get; set; } = string.Empty;

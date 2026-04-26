@@ -24,5 +24,8 @@ namespace GestionITM.Domain.Interfaces
 		Task<bool> ExistePorDocumentoAsync(string Documento); //verificar si existe un profesor por su documento de identidad
 
 		Task<IEnumerable<Profesor>> ObtenerProfesoresPorEspecialidadAsync(string Especialidad);
+
+		//Nivel 5: Consulta diferida para paginacion y filtros (IQueryable)
+		IQueryable<Profesor> ConsultarTodo(); //Permite construir consultas complejas con filtros y paginacion
 	}
 }

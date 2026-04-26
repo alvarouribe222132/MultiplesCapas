@@ -19,7 +19,7 @@ namespace GestionITM.Domain.Entities
         [MaxLength(200)]
         public string Correo { get; set; } = string.Empty;
 
-        public DateTime FechaInscripcion { get; set; }
+        public DateTime FechaInscripcion { get; set; } = DateTime.Now;
 
 		[MaxLength(20)]
 		public string Telefono { get; set; } = string.Empty;

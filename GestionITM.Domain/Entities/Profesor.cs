@@ -14,11 +14,12 @@ namespace GestionITM.Domain.Entities
 		[MaxLength(100)] 
 		public string Name { get; set; } = string.Empty;
 
+		[Required]
 		[EmailAddress] //para validar que se tenga el formato correcto (@dominio)
 		[MaxLength(200)]
 		public string Correo { get; set; } = string.Empty;
 
-		public DateTime FechaContratacion { get; set; }
+		public DateTime FechaContratacion { get; set; } = DateTime.Now;
 
 		[MaxLength(20)]
 		public string Telefono { get; set; } = string.Empty;
@@ -27,6 +28,7 @@ namespace GestionITM.Domain.Entities
 		public string Documento { get; set; } = string.Empty;
 
 		[Required]
+		[MaxLength(100)]
 		public string Especialidad { get; set; } = string.Empty;
 		
 

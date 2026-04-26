@@ -1,7 +1,9 @@
 ﻿
+using Microsoft.AspNetCore.Http;
 using GestionITM.Domain.Exceptions;
 using GestionITM.Domain.Modelos;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,10 @@ using System.Text.Json;
 
 namespace GestionITM.Api.Middleware
 {
+//Nota: este milddware vive en la capa API porque:
+//trabaja directamennte con HttpContext, RequestDelegate y el pipeline HTTP de ASP.NET Core.
+//forma parte de la capa de presentacion: se encarga de como respondemos al cliente(status code, JSON de error).
+//la capa Infraestructure se enfoca en acceso a datos (DbContext, repositorios) y no deberia depender de ASP.NET Core.
 	public class ExceptionMiddleWare 
 	{
 		private readonly RequestDelegate _next;

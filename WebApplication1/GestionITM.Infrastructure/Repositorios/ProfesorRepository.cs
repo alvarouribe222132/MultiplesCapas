@@ -100,5 +100,13 @@ namespace GestionITM.Infrastructure.Repositorios
 			//si no encuentra ninguno retornara NUll por eso la instruccion Task<Profesor?> tiene el simbolo ?
 			//es como si se hiciera un Select Top 1 * From Profesors Where Documento = 'xxxx'
 		}
+
+		public IQueryable<Profesor> ConsultarTodo()
+		{
+			return _context.Profesors.AsQueryable();
+			// .AsQueryable() expone la tabla como una consulta flexible
+			// que puede ser filtrada, paginada u ordenada ANTES de ir a la BD
+			// es como tener un SELECT * FROM Profesors listo para agregarle WHERE, ORDER BY, etc.
+			}
 	}
 }

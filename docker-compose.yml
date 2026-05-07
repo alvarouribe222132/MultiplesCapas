@@ -1,0 +1,37 @@
+version: '3.8' #version del formato Compose
+
+# Aqui definimos nuestra "Flora de Camiones  (Los Servicios)":
+services:
+#"El camion de la base de datos (SQL SERVER para Linux)"
+
+  db-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: itm-database
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SuperPassword123! # en la vida real en produccion esto debe estar oculto
+    ports:
+      - "1433:1433" #Exponemos el puerto para SQL Server
+    networks:
+      - itm-network
+
+# Camion 2: El camion de la API de Profesores
+  api-gestion:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: itm-api
+    depends_on:
+      - db-sqlserver  # la API no arranca hasta que la base de datos esta lista
+    ports:
+      - "8080:80" #Exponemos el puerto para la API
+    environment:
+    #Sobreescribimos el appsettings.json 
+      - ConnectionStrings__DefaultConnection=Server=db-sqlserver;Database=GestionITM;User Id=sa;Password=SuperPassword123!;TrustServerCertificate=True;
+    networks:
+      - itm-network
+      #Red de la flota: todos los camiones se comunica a través de esta red
+
+networks:
+  itm-network:
+    driver: bridge

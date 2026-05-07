@@ -20,8 +20,9 @@ namespace GestionITM.Domain.Entities
 		public string Descripcion { get; set; } = string.Empty;
 
 		[Range(0, double.MaxValue)]
+		//Le indicamos explícitamente a SQL Server cuántos dígitos totales y decimales usar.
+		[System.ComponentModel.DataAnnotations.Schema.Column(TypeName = "decimal(18,2)")]
 
-		[Column(TypeName = "decimal(18,2)")]
 		public decimal Precio { get; set; }
 
 		public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;

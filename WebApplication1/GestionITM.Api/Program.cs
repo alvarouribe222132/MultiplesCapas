@@ -10,15 +10,17 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text; //Para usar Encoding.UTF8.GetBytes
 using System.Reflection;
 using Microsoft.OpenApi; //Necesario para Assembly.GetExecutingAssembly() en la configuracion del Swagger
+//using Microsoft.OpenApi.Models; //Necesario para OpenApiInfo en la configuracion del Swagger
+using System.IO; //Necesario para Path.Combine en la configuracion del Swagger
+using Serilog; //Necesario para usar el middleware de excepciones personalizado (ExceptionMiddleWare)
 
-/*aqui le decimos al programa como ensamblar las piezas como si fueran piesas le lego
- */
 
 var builder = WebApplication.CreateBuilder(args);
+// Ocultar warnings de DataProtection porque la API usa JWT, no Cookies
+builder.Logging.AddFilter("Microsoft.AspNetCore.DataProtection", LogLevel.Error);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddControllers();
 
 //Registrar los Swagger
 builder.Services.AddControllers();
@@ -62,7 +64,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 //configuracion de JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-	.AddJwtBearer(options => { 		options.TokenValidationParameters = new TokenValidationParameters
+	.AddJwtBearer(options => 
+	{ 		
+		options.TokenValidationParameters = new TokenValidationParameters
 		{
 			ValidateIssuer = true,
 			ValidateAudience = true,
@@ -91,13 +95,30 @@ builder.Services.AddScoped<InterfaceProfeRepositorio, ProfesorRepository>();
 //Registrar ApplicationDbContext
 
 //AutoMapper
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+//builder.Services.AddAutoMapper(typeof(MappingProfile));--debido a que actulice la version de AutoMapper, ahora se debe usar esta otra sintaxis
+builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(MappingProfile).Assembly));
 
 var app = builder.Build();
+//Nivel Dios: Aplicar migraciones pendientes automáticamente al arrancar
+using (var scope = app.Services.CreateScope())
+{
+	var services = scope.ServiceProvider;
+	try
+	{
+		var context = services.GetRequiredService<ApplicationDbContext>();
+		context.Database.Migrate();
+	}
+	catch (Exception ex)
+	{
+		var logger = services.GetRequiredService<ILogger<Program>>();
+		logger.LogError(ex, "Ocurrió un error al aplicar la migración de la base de datos.");
+	}
+}
 
-// Configure the HTTP request pipeline.
+
+// Configure the HTTP request pipeline. 
 app.UseMiddleware<ExceptionMiddleWare>(); //Agregamos el middleware de excepciones para manejar los errores de manera centralizada (ESCUDO DE PROTECCION CONTRA ERRORES)
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Docker")
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();

@@ -16,8 +16,27 @@ using Serilog; //Necesario para usar el middleware de excepciones personalizado 
 
 
 var builder = WebApplication.CreateBuilder(args);
-// Ocultar warnings de DataProtection porque la API usa JWT, no Cookies
-builder.Logging.AddFilter("Microsoft.AspNetCore.DataProtection", LogLevel.Error);
+
+// 1. Logger temporal (bootstrap logger) para capturar logs durante el arranque de la aplicación, antes de que el host esté completamente configurado.
+Log.Logger = new LoggerConfiguration()
+	.WriteTo.Console()
+	.CreateBootstrapLogger();
+
+try
+{
+	Log.Information("Arrancando el servidor GestionITM API...");
+
+	// 2. Le decimos a ASPNET que use Serilog y lea toda la configuración del JSON (appsettings.json) para configurar Serilog, incluyendo los sinks, niveles de log, etc.
+	builder.Host.UseSerilog((context, services, configuration) => configuration
+					 .ReadFrom.Configuration(context.Configuration)
+					 .ReadFrom.Services(services)
+					 .Enrich.FromLogContext());
+
+
+
+
+
+	builder.Logging.AddFilter("Microsoft.AspNetCore.DataProtection", LogLevel.Error);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi at https://aka.ms/aspnetcore/swashbuckle
@@ -142,14 +161,19 @@ using (var scope = app.Services.CreateScope())
 	}
 }
 
+	// 3. Mildleware mágico Nivel 5:  Registra los códigos HTTP 200, 400, 404, 500 aotomaticamente 
 
-// Configure the HTTP request pipeline. 
-app.UseMiddleware<ExceptionMiddleWare>(); //Agregamos el middleware de excepciones para manejar los errores de manera centralizada (ESCUDO DE PROTECCION CONTRA ERRORES)
+	app.UseSerilogRequestLogging(); // Middleware de Serilog para registrar las solicitudes HTTP y sus respuestas, incluyendo los códigos de estado. Esto es útil para monitorear el tráfico y detectar errores.
+
+
+	// Configure the HTTP request pipeline. 
+	app.UseMiddleware<ExceptionMiddleWare>(); //Agregamos el middleware de excepciones para manejar los errores de manera centralizada (ESCUDO DE PROTECCION CONTRA ERRORES)
 if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Docker")
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+
 //Bloque de activiacion de autenticacion y autorizacion, esto es importante para proteger las rutas de nuestra API y asegurar que solo los usuarios autorizados puedan acceder a ellas
 app.UseAuthentication();
 app.UseAuthorization();
@@ -157,3 +181,13 @@ app.UseAuthorization();
 app.MapControllers();
 app.Run();
 
+}
+catch (Exception ex)
+{
+	Log.Fatal(ex, "Fallo catastrófico al iniciar la API.");
+}
+finally
+{
+	Log.Information("Apagando la API de forma segura.");
+	Log.CloseAndFlush(); // Asegura que el archivo de texto no quede bloqueado
+}

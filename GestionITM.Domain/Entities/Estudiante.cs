@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
 
 namespace GestionITM.Domain.Entities
 {
     public class Estudiante
     {
-		[Key] public int EstudianteId { get; set; } //al dejar el [key] EF Core deja este campo por defecto autoincremental. es decir que en el POST no necesito ingresar un id
+		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
+        public int EstudianteId { get; set; } //al dejar el [key] EF Core deja este campo por defecto autoincremental. es decir que en el POST no necesito ingresar un id
 
         [Required]
         [MaxLength(100)]

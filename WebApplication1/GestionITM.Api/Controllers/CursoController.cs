@@ -5,7 +5,7 @@ using GestionITM.Domain.Interfaces;
 
 namespace GestionITM.Api.Controllers
 {
-	[Route("api/controller")] // esta es la ruta base para acceder a este controlador, por ejemplo api/curso
+	[Route("api/[controller]")] // esta es la ruta base para acceder a este controlador, por ejemplo api/curso
 	[ApiController]
 	public class CursoController : ControllerBase
 	{
@@ -16,7 +16,7 @@ namespace GestionITM.Api.Controllers
 			_repository = repository;
 		}
 		// GET: Api/Curso
-		[HttpGet]
+		[HttpGet()]
 
 		public async Task<ActionResult<IEnumerable<Curso>>> GetCursos()
 		{
@@ -25,7 +25,7 @@ namespace GestionITM.Api.Controllers
 		}
 
 		//GetApi/Curso/5
-		[HttpGet("{id}")]
+		[HttpGet("{IdCurso}")]
 		public async Task<ActionResult<Curso>> GetCursos(int IdCurso)
 		{
 			var curso = await _repository.ObtenerPorIdAsync(IdCurso);

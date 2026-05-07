@@ -32,7 +32,7 @@ namespace GestionITM.Infrastructure.Data
 				{
 					EstudianteId = 1,
 					Name = "Juan Pérez",
-					Correo = "juan@itm.edu.co",
+					Correo = "juan@correo.itm.edu.co",
 					Telefono = "3001234567",
 					Documento = "1234567890",
 					FechaInscripcion = new DateTime(2024, 1, 15)
@@ -41,7 +41,7 @@ namespace GestionITM.Infrastructure.Data
 				{
 					EstudianteId = 2,
 					Name = "María García",
-					Correo = "maria@itm.edu.co",
+					Correo = "maria@correo.itm.edu.co",
 					Telefono = "3009876543",
 					Documento = "0987654321",
 					FechaInscripcion = new DateTime(2024, 2, 20)

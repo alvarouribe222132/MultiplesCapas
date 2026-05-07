@@ -69,10 +69,14 @@ namespace GestionITM.Infrastructure.Services
 
 		public async Task<bool> ActualizarEstudianteAsync(EstudianteUpdateDto estudianteUpdateDto)
 		{
+			if (!estudianteUpdateDto.Correo.EndsWith("@correo.itm.edu.co"))
+				throw new BadRequestException("El correo debe ser institucional (@correo.itm.edu.co)"); // 400
+				
+
 			var estudiante = await _repository.ObtenerPorIdAsync(estudianteUpdateDto.EstudianteId);
 
 			if (estudiante == null)
-				return false;
+				throw new NotFoundException($"El estudiante con id {estudianteUpdateDto.EstudianteId} no existe."); // 404
 
 			_mapper.Map(estudianteUpdateDto, estudiante);
 

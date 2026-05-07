@@ -9,8 +9,14 @@ namespace GestionITM.Api.Mappings
 	{
 		public MappingProfile() 
 		{
-			CreateMap<Estudiante, EstudianteDto>();
-			CreateMap<EstudianteCreateDto, Estudiante>();
+			CreateMap<Estudiante, EstudianteDto>() //las siguentes 2 loneas se colocan par corregir el problem del mapeo de los ID de los estudiantes
+			.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.EstudianteId))
+			.ForMember(dest => dest.NombreCompleto, opt => opt.MapFrom(src => src.Name));
+			CreateMap<EstudianteCreateDto, Estudiante>()
+			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Nombre)); // ← conectar Nombre → Name
+
+			CreateMap<EstudianteUpdateDto, Estudiante>()  // ← para conectar los nombres dispares
+		.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Nombre));
 			CreateMap<Profesor, ProfesorDto>();
 			CreateMap<ProfesorCreateDto, Profesor>();
 		

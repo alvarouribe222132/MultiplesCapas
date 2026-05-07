@@ -43,16 +43,22 @@ namespace GestionITM.Api.Controllers
 		[HttpGet("{EstudianteId:int}")]
 		public async Task<ActionResult<EstudianteDto>> GetEstudiente(int EstudianteId)
 		{
-		//Nota: Aqui se podra agregar logica en el Servicio para manejar el Null
-		//o mapear qui si el servicio devuelve la entidad (pero mejor en el servicio)
+			//Nota: Aqui se podra agregar logica en el Servicio para manejar el Null
+			//o mapear qui si el servicio devuelve la entidad (pero mejor en el servicio)
+			if (EstudianteId <= 0)
+			{
+				return BadRequest(new
+				{ message = "El ID debe ser mayor a 0" });
+			}
 			var estudianteDto = await _service.ObtenerPorIdAsync(EstudianteId);
+			 
 			if (estudianteDto == null)
 			{
-				return NotFound(new { message = $"Estudiante con el {EstudianteId} no fue encontrado" });
+				return NotFound(new 
+				{ message = $"Estudiante con el {EstudianteId} no fue encontrado" });
 			}
 			return Ok(estudianteDto);// devuelve el estudiante encontrado
 		}
-
 		//Post api/estudiante
 		[HttpPost]
 
@@ -77,11 +83,7 @@ namespace GestionITM.Api.Controllers
 				return BadRequest("El ID ingresado no coincide con el ID del Estudiante. ");
 			}
 
-			var actualiza = await _service.ActualizarEstudianteAsync(estudianteUpdateDto);
-			if (!actualiza)
-			{
-				return NotFound(new { message = $"El Estudiante con id {EstudianteId} no existe. " });
-			}
+			await _service.ActualizarEstudianteAsync(estudianteUpdateDto);
 			return Ok(new { message = "Estudiante actualizado Correctamente" });
 		}
 

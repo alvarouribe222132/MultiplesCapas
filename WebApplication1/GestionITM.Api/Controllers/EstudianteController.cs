@@ -11,7 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GestionITM.Api.Controllers
 {
-	[Authorize]//ESTE es el candado del 2 filtro de seguridad a traves de un Token 
+	
+	//[Authorize]//ESTE es el candado del 2 filtro de seguridad a traves de un Token.   07/05/2026 se desactiva temporalmente para pruebas
 	[Route ("api/[controller]")] // esta es la ruta base para acceder a este controlador, por ejemplo api/estudiante
 	[ApiController]
 

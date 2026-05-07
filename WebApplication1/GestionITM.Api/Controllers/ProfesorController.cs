@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GestionITM.Api.Controllers
 {
-	[Authorize]
+	//[Authorize] 07/05/2026 se desactiva temporalmente para pruebas
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ProfesorController : ControllerBase

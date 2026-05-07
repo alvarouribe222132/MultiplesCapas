@@ -31,8 +31,35 @@ builder.Services.AddSwaggerGen(c =>
 	{ 
 		Title = "GestionITM API", 
 		Version = "v1" 
-		
+	}
+	);
+	//el bloque siguiente solo se usará cuando todo funcione (produccion.)
+	/*c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		Name = "Authorization",
+		Type = SecuritySchemeType.Http,
+		Scheme = "Bearer",
+		BearerFormat = "JWT",
+		In = ParameterLocation.Header,
+		Description = "Ingresa el token JWT"
 	});
+
+	c.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Type = ReferenceType.SecurityScheme,
+					Id = "Bearer"
+				}
+			},
+			Array.Empty<string>()
+		}
+	});
+	*/
+
 
 	//Instruccion Nueva
 	//Localice el archivo xml generado en la carpeta de binario (bin) despues de compilar el proyecto. El nombre del archivo suele ser el mismo que el nombre del proyecto, seguido de .xml (por ejemplo, GestionITM.API.xml)
@@ -105,8 +132,8 @@ using (var scope = app.Services.CreateScope())
 	var services = scope.ServiceProvider;
 	try
 	{
-		var context = services.GetRequiredService<ApplicationDbContext>();
-		context.Database.Migrate();
+		var context = services.GetRequiredService<ApplicationDbContext>(); //→ obtiene tu conexión a la BD
+		context.Database.Migrate(); //Objetivo:que al iniciar el contenedor Docker, EF Core detecte migraciones pendientes y las ejecute automáticamente.
 	}
 	catch (Exception ex)
 	{

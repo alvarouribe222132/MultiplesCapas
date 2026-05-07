@@ -1,0 +1,5 @@
+para poder hacer la migración fue necesario ejecutar este comando desde la Terminal del propio Visual
+cd WebApplication1 dotnet ef migrations add SeedDatosIniciales --project GestionITM.Infrastructure --startup-project GestionITM.Api
+
+
+

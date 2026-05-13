@@ -20,5 +20,8 @@ namespace GestionITM.Domain.Entities
 		// Créditos académicos del curso
 		[Range(0, 30)]
 		public int Creditos { get; set; }
+
+		public ICollection<Matricula> Matriculas { get; set; }// para Relaciónar con matrículas para las funciones ObtenerMatriculaPorCursoAsync y ObtenerMatriculaPorCursoYEstadoAsync
+		= new List<Matricula>();
 	}
 }

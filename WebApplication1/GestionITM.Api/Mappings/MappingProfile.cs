@@ -19,7 +19,23 @@ namespace GestionITM.Api.Mappings
 		.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Nombre));
 			CreateMap<Profesor, ProfesorDto>();
 			CreateMap<ProfesorCreateDto, Profesor>();
-		
+
+
+			CreateMap<Matricula, MatriculaDto>()
+			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Curso.Nombre))
+			
+		.ForMember(dest => dest.NombreEstudiante,opt => opt.MapFrom(src => src.Estudiante.Name));
+
+
+			CreateMap<MatriculaCreateDto, Matricula>();
+
+			CreateMap<MatriculaUpdateDto, Matricula>();
+
+			CreateMap<Matricula, MatriculaDto>()
+			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Curso.Nombre))
+
+			.ForMember(dest => dest.NombreEstudiante, opt => opt.MapFrom(src => src.Estudiante.Name));
+
 		}
 	}
 }

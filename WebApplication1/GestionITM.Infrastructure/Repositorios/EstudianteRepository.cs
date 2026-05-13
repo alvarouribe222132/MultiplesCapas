@@ -85,5 +85,10 @@ namespace GestionITM.Infrastructure.Repositorios
 			//retorna true si existe, false si no existe
 		}
 
+		public async Task<bool> ExistePorCorreoAsync(string correo)
+		{
+			return await _context.Estudiantes.AnyAsync(e => e.Correo == correo);
+		}
+
 	}
 }

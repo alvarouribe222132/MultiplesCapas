@@ -70,7 +70,7 @@ namespace GestionITM.Infrastructure.Services
 				Items = _mapper.Map<List<ProfesorDto>>(items),
 				PaginaActual = filter.Pagina,
 				TotalRegistros = totalRegistros,
-				RegistroPorPagina = filter.RegistrosPorPagina,
+				RegistrosPorPagina = filter.RegistrosPorPagina,
 				TotalPaginas = (int)Math.Ceiling(totalRegistros / (double)filter.RegistrosPorPagina)
 			};
 

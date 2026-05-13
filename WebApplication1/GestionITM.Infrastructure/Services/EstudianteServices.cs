@@ -30,14 +30,27 @@ namespace GestionITM.Infrastructure.Services
 		}
 		public async Task<bool> RegistrarEstudianteAsync(EstudianteCreateDto estudianteCreateDto)
 		{
-
+			//validar el dominio institucional
 			//Reglas de negocio para validadr el estudiante Nivel 5
-			//No permitimos correo que no sea del dominio itm.edu.co
-
 			if (!estudianteCreateDto.Correo.EndsWith("@correo.itm.edu.co"))
+		{
+				return false;
+		}
+
+			//validar la existencia del documento (duplicidad)
+			var existeDocumento = await _repository.ExistePorDocumentoAsync(estudianteCreateDto.Documento);
+			if (existeDocumento)
 			{
-				return false; //No se puede registrar el estudiante
+				throw new ConflictException($"Ya existe un estudiante con el documento {estudianteCreateDto.Documento}");
+
 			}
+
+			//validando que el correo no exista (duplicidad)
+			var existeCorreo = await _repository.ExistePorCorreoAsync(estudianteCreateDto.Correo);
+			if (existeCorreo){
+				throw new ConflictException($"Ya existe un estudiante con el correo {estudianteCreateDto.Correo}");
+			}
+
 			var estudiante = _mapper.Map<Estudiante>(estudianteCreateDto);
 			estudiante.FechaInscripcion = DateTime.UtcNow; //Asignamos la fecha de inscripción al momento de registrar
 
@@ -54,16 +67,6 @@ namespace GestionITM.Infrastructure.Services
 				throw new NotFoundException($"No se encontró el estudiante con ID {EstudianteId}"); // 404
 
 			return _mapper.Map<EstudianteDto>(estudiante); // se convierte la Entidad en Dto
-		}
-
-
-		public async Task CrearAsync(EstudianteCreateDto dto)
-
-		{
-			var existe = await _repository.ExistePorDocumentoAsync(dto.Documento);
-
-			if (existe)
-				throw new ConflictException($"Ya existe un estudiante con el documento {dto.Documento}"); // 409
 		}
 
 

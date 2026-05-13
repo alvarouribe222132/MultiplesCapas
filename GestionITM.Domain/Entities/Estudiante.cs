@@ -29,5 +29,7 @@ namespace GestionITM.Domain.Entities
 
         [MaxLength(20)]
         public string Documento { get; set; } = string.Empty;
+
+		public ICollection<Matricula> Matriculas { get; set; } = new List<Matricula>();
 	}
 }

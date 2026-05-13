@@ -19,6 +19,6 @@ namespace GestionITM.Domain.Modelos
 		public int PaginaActual { get; set; } // El numero de pagina que se esta mostrando actualmente
 		public int TotalPaginas {  get; set; }// El numero total de paginas disponibles
 		public int TotalRegistros { get; set; } // El numero total de registros en la BD (sin paginar)
-		public int RegistroPorPagina { get; set; } // El numero de registros que se muestran por pagina
+		public int RegistrosPorPagina { get; set; } // El numero de registros que se muestran por pagina
 	}
 }

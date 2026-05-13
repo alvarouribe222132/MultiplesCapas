@@ -11,11 +11,11 @@ namespace GestionITM.Domain.Entities
 
 		[Required]
 		public int EstudianteId { get; set; }
+		public Estudiante? Estudiante { get; set; }  //con el simbolo ?le digo al compilador "Esta propiedad podría quedar null" debido a que son objetos relacionados, es decir, que una matricula puede existir sin un estudiante asociado, aunque en la practica esto no deberia pasar, pero el compilador no lo sabe y por eso le digo que puede ser null.
 
 		[Required]
-		[MaxLength(50)]
 		public int CursoId { get; set; }
-
+		public Curso? Curso { get; set; } 
 		public DateTime FechaMatricula { get; set; }
 
 		[Required]

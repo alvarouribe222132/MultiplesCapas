@@ -125,18 +125,28 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 		};
 	});
 
-/*2. Registramos el repositorio de estudiante para la inyeccion de dependencias, esto nos permite usar el repositorio en el controlador sin tener que preocuparnos por la instanciacion del mismo
-*AddScoped se usa para crear una instancia del repositorio por cada solicitud HTTP, esto es importante para evitar problemas de concurrencia y para asegurar que cada solicitud tenga su propia instancia del repositorio
-*Basicamente le estamos diciendo a .NET que siempre que un controlador le pida a la interfaz IEstudianteRepository, le entregue una instancia de la clase EstudianteRepository
-*Tú automaticamente estregale la instancia lista para usar la clase real que es en este caso EstudianteRepository
-*
-*/
-builder.Services.AddScoped<InterfaceEstudRepositorio, EstudianteRepository>();
-builder.Services.AddScoped<IEstudianteService, EstudianteServices>();
-builder.Services.AddScoped<ICursoRepository, CursoRepository>();
+	/*2. Registramos el repositorio de estudiante para la inyeccion de dependencias, esto nos permite usar el repositorio en el controlador sin tener que preocuparnos por la instanciacion del mismo
+	*AddScoped se usa para crear una instancia del repositorio por cada solicitud HTTP, esto es importante para evitar problemas de concurrencia y para asegurar que cada solicitud tenga su propia instancia del repositorio
+	*Basicamente le estamos diciendo a .NET que siempre que un controlador le pida a la interfaz IEstudianteRepository, le entregue una instancia de la clase EstudianteRepository
+	*Tú automaticamente estregale la instancia lista para usar la clase real que es en este caso EstudianteRepository
+	*
+	*/
+	builder.Services.AddScoped<InterfaceEstudRepositorio, EstudianteRepository>();
+	builder.Services.AddScoped<IEstudianteService, EstudianteServices>();
 
-//AddScoped crea una instancia para cada solicitud HTTP, pero usa la misma instancia en las otras llamadas dentro de la misma petición web
-builder.Services.AddScoped<IProfesorService, ProfesorServices>();
+	builder.Services.AddScoped<InterfaceCursoRepositorio, CursoRepository>();
+
+	builder.Services.AddScoped<InterfaceProfeRepositorio, ProfesorRepository>();
+	builder.Services.AddScoped<IProfesorService, ProfesorServices>();
+
+	builder.Services.AddScoped<InterfaceMatricRepositorio, MatriculaRepository>();
+	builder.Services.AddScoped<IMatriculaService, MatriculaServices>();
+
+	builder.Services.AddScoped<ICursoService, CursoServices>();
+	builder.Services.AddScoped<InterfaceCursoRepositorio, CursoRepository>();
+
+	//AddScoped crea una instancia para cada solicitud HTTP, pero usa la misma instancia en las otras llamadas dentro de la misma petición web
+	builder.Services.AddScoped<IProfesorService, ProfesorServices>();
 builder.Services.AddScoped<InterfaceProfeRepositorio, ProfesorRepository>();
 //Registrar ApplicationDbContext
 

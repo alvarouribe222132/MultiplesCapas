@@ -11,7 +11,7 @@ using GestionITM.Infrastructure.Data;
 
 namespace GestionITM.Infrastructure.Repositorios
 {
-	public class CursoRepository : ICursoRepository
+	public class CursoRepository : InterfaceCursoRepositorio
 	{
 		private readonly ApplicationDbContext _context;
 
@@ -28,7 +28,7 @@ namespace GestionITM.Infrastructure.Repositorios
 		{
 			return await _context.Cursos.FindAsync(IdCurso);
 		}
-		public async Task AgregarAsync(Curso curso)
+		public async Task CrearAsync(Curso curso)
 		{
 			await _context.Cursos.AddAsync(curso);
 			await _context.SaveChangesAsync();

@@ -15,7 +15,7 @@ namespace GestionITM.Domain.Interfaces
 	//IEnumerable es una coleccion generica de solo lectura. 
 		Task<Curso?> ObtenerPorIdAsync(int cursoId); //obtener el curso por su ID>
 
-		Task AgregarAsync(Curso curso); //agregar un nuevo curso
+		Task CrearAsync(Curso curso); //agregar un nuevo curso
 		Task ActualizarAsync(Curso curso); //actualizar un curso existente
 		Task EliminarAsync(int cursoId); //eliminar un curso por su ID
 	}

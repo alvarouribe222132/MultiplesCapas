@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GestionITM.Domain.Dtos
+{
+	public class CursoDto
+	{
+		public int IdCurso { get; set; }
+
+		public string Codigo { get; set; } = string.Empty;
+		public string NombreCurso { get; set; } = string.Empty;
+
+		public int Creditos { get; set; }
+	}
+}

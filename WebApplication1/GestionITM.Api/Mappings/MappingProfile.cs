@@ -36,6 +36,13 @@ namespace GestionITM.Api.Mappings
 
 			.ForMember(dest => dest.NombreEstudiante, opt => opt.MapFrom(src => src.Estudiante.Name));
 
+
+			CreateMap<Curso, CursoDto>();
+
+			CreateMap<CursoCreateDto, Curso>();
+
+			CreateMap<CursoUpdateDto, Curso>();
+
 		}
 	}
 }

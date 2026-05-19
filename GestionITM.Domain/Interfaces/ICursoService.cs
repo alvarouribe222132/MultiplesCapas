@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using GestionITM.Domain.Modelos;
 
 namespace GestionITM.Domain.Interfaces
 {
@@ -13,5 +14,6 @@ namespace GestionITM.Domain.Interfaces
 
 		Task<bool> ActualizarCursoAsync(CursoUpdateDto cursoUpdateDto);
 		Task<bool> DeleteCursoAsync(int IdCurso);
+		Task<PagedResults<CursoDto>> ObtenerCursosPaginadosAsync(CursoFilterDto filter);
 	}
 }

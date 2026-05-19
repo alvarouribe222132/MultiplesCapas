@@ -16,33 +16,33 @@ namespace GestionITM.Api.Mappings
 			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Nombre)); // ← conectar Nombre → Name
 
 			CreateMap<EstudianteUpdateDto, Estudiante>()  // ← para conectar los nombres dispares
-		.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Nombre));
+			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Nombre))
+			.ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono));
+
 			CreateMap<Profesor, ProfesorDto>();
 			CreateMap<ProfesorCreateDto, Profesor>();
 
 
 			CreateMap<Matricula, MatriculaDto>()
 			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Curso.Nombre))
-			
-		.ForMember(dest => dest.NombreEstudiante,opt => opt.MapFrom(src => src.Estudiante.Name));
+			.ForMember(dest => dest.NombreEstudiante,opt => opt.MapFrom(src => src.Estudiante.Name));
 
 
 			CreateMap<MatriculaCreateDto, Matricula>();
 
 			CreateMap<MatriculaUpdateDto, Matricula>();
 
-			CreateMap<Matricula, MatriculaDto>()
-			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Curso.Nombre))
 
-			.ForMember(dest => dest.NombreEstudiante, opt => opt.MapFrom(src => src.Estudiante.Name));
+			CreateMap<Curso, CursoDto>()
+			.ForMember(dest => dest.NombreCurso,opt => opt.MapFrom(src => src.Nombre)) //esto con el fin de que cuando se haga un Get se muestre el nombre del curso (CursoDto = Curso.cs )
+			.ForMember(dest => dest.CuposDisponibles, opt => opt.MapFrom(src => src.CuposDisponibles));
 
 
-			CreateMap<Curso, CursoDto>();
+			CreateMap<CursoCreateDto, Curso>()
+			.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.NombreCurso));
 
-			CreateMap<CursoCreateDto, Curso>();
-
-			CreateMap<CursoUpdateDto, Curso>();
-
+			CreateMap<CursoUpdateDto, Curso>()
+			.ForMember(dest => dest.Nombre,  opt => opt.MapFrom(src => src.Nombre));
 		}
 	}
 }

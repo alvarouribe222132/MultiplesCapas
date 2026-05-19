@@ -17,7 +17,7 @@ namespace GestionITM.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.3")
+                .HasAnnotation("ProductVersion", "10.0.0-preview.1.25081.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -36,6 +36,9 @@ namespace GestionITM.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Creditos")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CuposDisponibles")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
@@ -82,26 +85,6 @@ namespace GestionITM.Infrastructure.Migrations
                     b.HasKey("EstudianteId");
 
                     b.ToTable("Estudiantes");
-
-                    b.HasData(
-                        new
-                        {
-                            EstudianteId = 1,
-                            Correo = "juan@correo.itm.edu.co",
-                            Documento = "1234567890",
-                            FechaInscripcion = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Juan Pérez",
-                            Telefono = "3001234567"
-                        },
-                        new
-                        {
-                            EstudianteId = 2,
-                            Correo = "maria@correo.itm.edu.co",
-                            Documento = "0987654321",
-                            FechaInscripcion = new DateTime(2024, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "María García",
-                            Telefono = "3009876543"
-                        });
                 });
 
             modelBuilder.Entity("GestionITM.Domain.Entities.Matricula", b =>
@@ -113,7 +96,6 @@ namespace GestionITM.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CursoId")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<string>("Estado")
@@ -133,6 +115,10 @@ namespace GestionITM.Infrastructure.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CursoId");
+
+                    b.HasIndex("EstudianteId");
 
                     b.ToTable("Matriculas");
                 });
@@ -205,6 +191,35 @@ namespace GestionITM.Infrastructure.Migrations
                     b.HasKey("ProfesorId");
 
                     b.ToTable("Profesors");
+                });
+
+            modelBuilder.Entity("GestionITM.Domain.Entities.Matricula", b =>
+                {
+                    b.HasOne("GestionITM.Domain.Entities.Curso", "Curso")
+                        .WithMany("Matriculas")
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GestionITM.Domain.Entities.Estudiante", "Estudiante")
+                        .WithMany("Matriculas")
+                        .HasForeignKey("EstudianteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Curso");
+
+                    b.Navigation("Estudiante");
+                });
+
+            modelBuilder.Entity("GestionITM.Domain.Entities.Curso", b =>
+                {
+                    b.Navigation("Matriculas");
+                });
+
+            modelBuilder.Entity("GestionITM.Domain.Entities.Estudiante", b =>
+                {
+                    b.Navigation("Matriculas");
                 });
 #pragma warning restore 612, 618
         }

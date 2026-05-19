@@ -74,13 +74,21 @@ namespace GestionITM.Infrastructure.Services
 			{
 				throw new ConflictException($"Ya existe una matrícula para el estudiante {matriculaCreateDto.EstudianteId} en el curso {matriculaCreateDto.CursoId}"); // 409
 			}
-
+			//validacion de cursos disponibles
+			if (curso.CuposDisponibles <= 0)
+			{
+				throw new BadRequestException("El curso no tiene cupos disponibles");
+			}
+		
 			//crear la matricula luego de las validaciones anteriores
 			var matricula = _mapper.Map<Matricula>(matriculaCreateDto); // se convierte el Dto en Entidad
 
 			matricula.FechaMatricula = DateTime.UtcNow; // se asigna la fecha actual
 			matricula.Estado = "Activa"; // se asigna el estado inicial
 			matricula.Periodo = matriculaCreateDto.Periodo;
+
+			curso.CuposDisponibles--; //se descuenta de la cantidad disponible
+			await _cursoRepository.ActualizarAsync(curso);
 
 			await _repository.CrearAsync(matricula); // se guarda en la base de datos
 			return matricula.Id;

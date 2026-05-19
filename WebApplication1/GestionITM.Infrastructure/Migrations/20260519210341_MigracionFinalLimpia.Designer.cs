@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionITM.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260303230440_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260519210341_MigracionFinalLimpia")]
+    partial class MigracionFinalLimpia
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.3")
+                .HasAnnotation("ProductVersion", "10.0.0-preview.1.25081.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -39,6 +39,9 @@ namespace GestionITM.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Creditos")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CuposDisponibles")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
@@ -63,6 +66,11 @@ namespace GestionITM.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Documento")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("FechaInscripcion")
                         .HasColumnType("datetime2");
@@ -91,7 +99,6 @@ namespace GestionITM.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CursoId")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<string>("Estado")
@@ -111,6 +118,10 @@ namespace GestionITM.Infrastructure.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CursoId");
+
+                    b.HasIndex("EstudianteId");
 
                     b.ToTable("Matriculas");
                 });
@@ -142,6 +153,76 @@ namespace GestionITM.Infrastructure.Migrations
                     b.HasKey("IdProduct");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("GestionITM.Domain.Entities.Profesor", b =>
+                {
+                    b.Property<int>("ProfesorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProfesorId"));
+
+                    b.Property<string>("Correo")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Documento")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Especialidad")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("FechaContratacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("ProfesorId");
+
+                    b.ToTable("Profesors");
+                });
+
+            modelBuilder.Entity("GestionITM.Domain.Entities.Matricula", b =>
+                {
+                    b.HasOne("GestionITM.Domain.Entities.Curso", "Curso")
+                        .WithMany("Matriculas")
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GestionITM.Domain.Entities.Estudiante", "Estudiante")
+                        .WithMany("Matriculas")
+                        .HasForeignKey("EstudianteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Curso");
+
+                    b.Navigation("Estudiante");
+                });
+
+            modelBuilder.Entity("GestionITM.Domain.Entities.Curso", b =>
+                {
+                    b.Navigation("Matriculas");
+                });
+
+            modelBuilder.Entity("GestionITM.Domain.Entities.Estudiante", b =>
+                {
+                    b.Navigation("Matriculas");
                 });
 #pragma warning restore 612, 618
         }

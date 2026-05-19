@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using GestionITM.Domain.Dtos;
 using GestionITM.Domain.Entities;
-using GestionITM.Domain.Interfaces;
 using GestionITM.Domain.Exceptions;
+using GestionITM.Domain.Interfaces;
 using GestionITM.Domain.Modelos; //para el pagedresults
 using Microsoft.EntityFrameworkCore; //Crucial para TolistAsync y CountAsync
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GestionITM.Infrastructure.Services
 {
@@ -18,9 +18,7 @@ namespace GestionITM.Infrastructure.Services
 			private readonly InterfaceCursoRepositorio _repository;
 			private readonly IMapper _mapper;
 
-			public CursoServices(
-				InterfaceCursoRepositorio repository,
-				IMapper mapper)
+			public CursoServices(InterfaceCursoRepositorio repository,IMapper mapper)
 			{
 				_repository = repository;
 				_mapper = mapper;
@@ -83,5 +81,60 @@ namespace GestionITM.Infrastructure.Services
 
 				return true;
 			}
+
+		public async Task<PagedResults<CursoDto>> ObtenerCursosPaginadosAsync(CursoFilterDto filter)
+		{
+			//var cursos = await _repository.ObtenerTodoAsync();  eliminacion para no colapzar la BD
+			//en este metodo se usa Async y await 
+
+			var query = _repository.ConsultarQueryable(); // este Ef Core genera SQL REAL con: Where, Skip y Take ejemplo:
+														  //SELECT *
+														  //FROM Cursos
+														  //WHERE Creditos >= 3
+														  //ORDER BY IdCurso
+														  //OFFSET 0 ROWS
+														  //FETCH NEXT 10 ROWS ONLY
+
+			// filtro por nombre
+			if (!string.IsNullOrWhiteSpace(filter.NombreCurso))
+			{
+				query = query.Where(c =>
+					c.Nombre.Contains(filter.NombreCurso));
+			}
+
+			// filtro por créditos
+			if (filter.CreditosMinimos.HasValue)
+			{
+				query = query.Where(c =>
+					c.Creditos >= filter.CreditosMinimos.Value);
+			}
+
+			// filtro por cupos
+			if (filter.CuposMinimos.HasValue)
+			{
+				query = query.Where(c =>
+					c.CuposDisponibles >= filter.CuposMinimos.Value);
+			}
+
+			var totalRegistros = await query.CountAsync();
+
+			var cursosPaginados = await query
+				.Skip((filter.Pagina - 1) * filter.RegistrosPorPagina)
+				.Take(filter.RegistrosPorPagina)
+				.ToListAsync();
+
+			var cursosDto = _mapper.Map<List<CursoDto>>(cursosPaginados);
+
+			return new PagedResults<CursoDto>
+			{
+				Items = cursosDto,
+				PaginaActual = filter.Pagina,
+				RegistrosPorPagina = filter.RegistrosPorPagina,
+				TotalRegistros = totalRegistros,
+				TotalPaginas = (int)Math.Ceiling((double)totalRegistros / filter.RegistrosPorPagina)
+			};
 		}
+
+
+	}
 }

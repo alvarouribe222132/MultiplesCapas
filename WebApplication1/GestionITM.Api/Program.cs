@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text; //Para usar Encoding.UTF8.GetBytes
 using System.Reflection;
 using Microsoft.OpenApi; //Necesario para Assembly.GetExecutingAssembly() en la configuracion del Swagger
-//using Microsoft.OpenApi.Models; //Necesario para OpenApiInfo en la configuracion del Swagger
+using Microsoft.OpenApi.Models; //Necesario para OpenApiInfo en la configuracion del Swagger
 using System.IO; //Necesario para Path.Combine en la configuracion del Swagger
 using Serilog; //Necesario para usar el middleware de excepciones personalizado (ExceptionMiddleWare)
 
@@ -52,12 +52,13 @@ builder.Services.AddSwaggerGen(c =>
 		Version = "v1" 
 	}
 	);
-	//el bloque siguiente solo se usará cuando todo funcione (produccion.)
-	/*c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	//el bloque siguiente solo se usará cuando todo funcione (produccion con token .)
+
+	c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 	{
 		Name = "Authorization",
 		Type = SecuritySchemeType.Http,
-		Scheme = "Bearer",
+		Scheme = "bearer",
 		BearerFormat = "JWT",
 		In = ParameterLocation.Header,
 		Description = "Ingresa el token JWT"
@@ -77,7 +78,6 @@ builder.Services.AddSwaggerGen(c =>
 			Array.Empty<string>()
 		}
 	});
-	*/
 
 
 	//Instruccion Nueva
@@ -134,11 +134,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 	builder.Services.AddScoped<InterfaceEstudRepositorio, EstudianteRepository>();
 	builder.Services.AddScoped<IEstudianteService, EstudianteServices>();
 
-	builder.Services.AddScoped<InterfaceCursoRepositorio, CursoRepository>();
-
-	builder.Services.AddScoped<InterfaceProfeRepositorio, ProfesorRepository>();
-	builder.Services.AddScoped<IProfesorService, ProfesorServices>();
-
 	builder.Services.AddScoped<InterfaceMatricRepositorio, MatriculaRepository>();
 	builder.Services.AddScoped<IMatriculaService, MatriculaServices>();
 
@@ -156,6 +151,7 @@ builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(MappingProfile).Assembl
 
 var app = builder.Build();
 //Nivel Dios: Aplicar migraciones pendientes automáticamente al arrancar
+/*
 using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
@@ -170,6 +166,7 @@ using (var scope = app.Services.CreateScope())
 		logger.LogError(ex, "Ocurrió un error al aplicar la migración de la base de datos.");
 	}
 }
+*/
 
 	// 3. Mildleware mágico Nivel 5:  Registra los códigos HTTP 200, 400, 404, 500 aotomaticamente 
 

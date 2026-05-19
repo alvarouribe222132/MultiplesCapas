@@ -23,5 +23,7 @@ namespace GestionITM.Domain.Entities
 
 		public ICollection<Matricula> Matriculas { get; set; }// para Relaciónar con matrículas para las funciones ObtenerMatriculaPorCursoAsync y ObtenerMatriculaPorCursoYEstadoAsync
 		= new List<Matricula>();
+
+		public int CuposDisponibles { get; set; }
 	}
 }

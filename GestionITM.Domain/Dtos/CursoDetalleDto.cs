@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GestionITM.Domain.Dtos
 {
-	public class CursosFilterDto
+	public class CursoDetalleDto
 	{//antes de matricularse el estudiante necisita ver
 		// los cursos disponibles
 		// la cantidad de cupos disponibles para ver si si lo deja matricularse  o no

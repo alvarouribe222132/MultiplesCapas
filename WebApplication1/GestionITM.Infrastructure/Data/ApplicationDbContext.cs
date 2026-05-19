@@ -27,26 +27,6 @@ namespace GestionITM.Infrastructure.Data
 		{
 			base.OnModelCreating(modelBuilder);
 
-			modelBuilder.Entity<Estudiante>().HasData(
-				new Estudiante
-				{
-					EstudianteId = 1,
-					Name = "Juan Pérez",
-					Correo = "juan@correo.itm.edu.co",
-					Telefono = "3001234567",
-					Documento = "1234567890",
-					FechaInscripcion = new DateTime(2024, 1, 15)
-				},
-				new Estudiante
-				{
-					EstudianteId = 2,
-					Name = "María García",
-					Correo = "maria@correo.itm.edu.co",
-					Telefono = "3009876543",
-					Documento = "0987654321",
-					FechaInscripcion = new DateTime(2024, 2, 20)
-				}
-			);
 		}
 	}
 }

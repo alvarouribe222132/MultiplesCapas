@@ -3,6 +3,7 @@ using GestionITM.Domain.Entities;
 using GestionITM.Domain.Interfaces;
 using GestionITM.Domain.Modelos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestionITM.Api.Controllers  //este controler solo recibe peticiones Http,
 									  //y se encarga de llamar al servicio para que este ejecute la logica de negocio,
@@ -43,6 +44,7 @@ namespace GestionITM.Api.Controllers  //este controler solo recibe peticiones Ht
 		}
 
 		//Post api/Matricula
+		[Authorize(Roles = "Estudiante")]
 		[HttpPost]
 		public async Task<ActionResult> PostMatricula(MatriculaCreateDto matriculaCreateDto)
 		{

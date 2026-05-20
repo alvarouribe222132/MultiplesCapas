@@ -1,0 +1,26 @@
+﻿<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="GestionITM.AppMovil.Views.LoginView">
+
+	<VerticalStackLayout
+        Spacing="15"
+        Padding="30"
+        VerticalOptions="Center">
+
+		<Entry
+            x:Name="EmailEntry"
+            Placeholder="Email"
+            Keyboard="Email" />
+
+		<Entry
+            x:Name="PassEntry"
+            Placeholder="Password"
+            IsPassword="True" />
+
+		<Button
+            Text="Entrar"
+            Clicked="OnLoginClicked"/>
+	</VerticalStackLayout>
+
+</ContentPage>

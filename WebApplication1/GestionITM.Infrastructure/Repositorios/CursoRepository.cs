@@ -52,7 +52,7 @@ namespace GestionITM.Infrastructure.Repositorios
 
 		public IQueryable<Curso> ConsultarQueryable()
 		{
-			return _context.Cursos.AsQueryable();
+			return _context.Cursos.Include(c => c.Profesor).AsQueryable();
 		}
 	}
 }

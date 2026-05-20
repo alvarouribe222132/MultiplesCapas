@@ -25,5 +25,10 @@ namespace GestionITM.Domain.Entities
 		= new List<Matricula>();
 
 		public int CuposDisponibles { get; set; }
+
+		//FK
+		public int ProfesorId { get; set; }
+
+		public Profesor? Profesor { get; set; } = null!;
 	}
 }

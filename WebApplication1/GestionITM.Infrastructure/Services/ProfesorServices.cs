@@ -18,6 +18,7 @@ namespace GestionITM.Infrastructure.Services
 	public class ProfesorServices : IProfesorService  //la interfaz IEstudianteService define los métodos que esta clase debe implementar, este se encarga de buscar todo lo neceesario para preparar todo los alimentos
 	{
 		private readonly InterfaceProfeRepositorio _repository;
+		private readonly InterfaceProfeRepositorio _profesorRepository;
 		private readonly IMapper _mapper;  //El IMapper es el asistente de la interfaz para poder pasar los datos crudos hacia los platos o solicitudes necesarias
 
 		public ProfesorServices(InterfaceProfeRepositorio repository, IMapper mapper)

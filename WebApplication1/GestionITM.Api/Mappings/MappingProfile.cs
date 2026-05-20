@@ -19,8 +19,10 @@ namespace GestionITM.Api.Mappings
 			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Nombre))
 			.ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono));
 
-			CreateMap<Profesor, ProfesorDto>();
-			CreateMap<ProfesorCreateDto, Profesor>();
+			CreateMap<Profesor, ProfesorDto>()
+			.ForMember(dest => dest.NombreCompleto,	opt => opt.MapFrom(src => src.Name));
+			CreateMap<ProfesorCreateDto, Profesor>()
+			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.NombreCompleto));
 
 
 			CreateMap<Matricula, MatriculaDto>()
@@ -34,7 +36,8 @@ namespace GestionITM.Api.Mappings
 
 
 			CreateMap<Curso, CursoDto>()
-			.ForMember(dest => dest.NombreCurso,opt => opt.MapFrom(src => src.Nombre)) //esto con el fin de que cuando se haga un Get se muestre el nombre del curso (CursoDto = Curso.cs )
+			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Nombre)) //esto con el fin de que cuando se haga un Get se muestre el nombre del curso (CursoDto = Curso.cs )
+			.ForMember(dest => dest.NombreProfesor, opt => opt.MapFrom(src => src.Profesor != null ? src.Profesor.Name : "Sin Profesor"))
 			.ForMember(dest => dest.CuposDisponibles, opt => opt.MapFrom(src => src.CuposDisponibles));
 
 

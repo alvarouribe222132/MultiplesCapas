@@ -30,7 +30,8 @@ namespace GestionITM.Domain.Entities
 		[Required]
 		[MaxLength(100)]
 		public string Especialidad { get; set; } = string.Empty;
-		
+		public ICollection<Curso> Cursos { get; set; }
+		= new List<Curso>();
 
 	}
 }

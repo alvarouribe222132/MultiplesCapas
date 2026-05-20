@@ -66,6 +66,11 @@ namespace GestionITM.Infrastructure.Services
 			{
 				throw new NotFoundException($"No Existe el curso con ID {matriculaCreateDto.CursoId}"); // 404
 			}
+			if (curso.ProfesorId <= 0)
+			{
+				throw new BadRequestException("El curso no tiene profesor asignado");
+			}
+
 
 			// Validar si ya existe matrícula para ese estudiante y curso (Duplicado)
 			var existe = await _repository.ExisteMatriculaAsync(matriculaCreateDto.EstudianteId, matriculaCreateDto.CursoId);

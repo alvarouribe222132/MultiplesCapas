@@ -3,7 +3,8 @@ using GestionITM.Domain.Entities;
 using GestionITM.Domain.Interfaces;
 using GestionITM.Domain.Modelos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization; //para que solamente pormedio de un rol especifico se pueda matricular un estudiante. 
+										  //solamente funciona si desde Program.cs se tiene app.UseAuthentication() y app.UseAuthorization();
 
 namespace GestionITM.Api.Controllers  //este controler solo recibe peticiones Http,
 									  //y se encarga de llamar al servicio para que este ejecute la logica de negocio,

@@ -4,6 +4,7 @@ using GestionITM.Domain.Entities;
 using GestionITM.Domain.Exceptions;
 using GestionITM.Domain.Interfaces;
 using GestionITM.Domain.Modelos; //para el pagedresults
+using GestionITM.Infrastructure.Repositorios;
 using Microsoft.EntityFrameworkCore; //Crucial para TolistAsync y CountAsync
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,12 @@ namespace GestionITM.Infrastructure.Services
 	{
 			private readonly InterfaceCursoRepositorio _repository;
 			private readonly IMapper _mapper;
+			private readonly InterfaceProfeRepositorio _profesorRepository;
 
-			public CursoServices(InterfaceCursoRepositorio repository,IMapper mapper)
+		public CursoServices(InterfaceCursoRepositorio repository, InterfaceProfeRepositorio profesorRepository, IMapper mapper)
 			{
 				_repository = repository;
+				_profesorRepository = profesorRepository;
 				_mapper = mapper;
 			}
 
@@ -43,9 +46,19 @@ namespace GestionITM.Infrastructure.Services
 				return _mapper.Map<CursoDto>(curso);
 			}
 
+
 			public async Task<int> RegistrarCursoAsync(CursoCreateDto cursoCreateDto)
 			{
-				var curso = _mapper.Map<Curso>(cursoCreateDto);
+
+			var profesor = await _profesorRepository.ObtenerPorIdAsync(cursoCreateDto.ProfesorId);
+
+			if (profesor == null)
+			{
+				throw new NotFoundException(
+					$"No existe el profesor con ID {cursoCreateDto.ProfesorId}");
+			}
+
+			var curso = _mapper.Map<Curso>(cursoCreateDto);
 
 				await _repository.CrearAsync(curso);
 

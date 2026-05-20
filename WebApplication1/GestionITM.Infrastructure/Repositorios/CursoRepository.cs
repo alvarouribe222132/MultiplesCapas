@@ -22,11 +22,11 @@ namespace GestionITM.Infrastructure.Repositorios
 
 		public async Task<IEnumerable<Curso>> ObtenerTodoAsync()
 		{
-			return await _context.Cursos.ToListAsync();
+			return await _context.Cursos.Include(c => c.Profesor).ToListAsync(); //modificacion para que se muestre el nombre del profesor en curso
 		}
 		public async Task<Curso?> ObtenerPorIdAsync(int IdCurso)
 		{
-			return await _context.Cursos.FindAsync(IdCurso);
+			return await _context.Cursos.Include(c => c.Profesor).FirstOrDefaultAsync(c => c.IdCurso == IdCurso);
 		}
 		public async Task CrearAsync(Curso curso)
 		{
@@ -48,6 +48,11 @@ namespace GestionITM.Infrastructure.Repositorios
 				_context.Cursos.Remove(curso);
 				await _context.SaveChangesAsync();
 			}
+		}
+
+		public IQueryable<Curso> ConsultarQueryable()
+		{
+			return _context.Cursos.AsQueryable();
 		}
 	}
 }

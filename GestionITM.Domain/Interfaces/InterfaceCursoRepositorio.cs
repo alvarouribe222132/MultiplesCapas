@@ -18,5 +18,7 @@ namespace GestionITM.Domain.Interfaces
 		Task CrearAsync(Curso curso); //agregar un nuevo curso
 		Task ActualizarAsync(Curso curso); //actualizar un curso existente
 		Task EliminarAsync(int cursoId); //eliminar un curso por su ID
+
+		IQueryable<Curso> ConsultarQueryable();
 	}
 }

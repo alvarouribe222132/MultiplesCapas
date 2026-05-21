@@ -73,7 +73,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="ViewModels\CatalogoView.xaml">
+	  <MauiXaml Update="Views\CatalogoView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoginView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ProfesoresPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

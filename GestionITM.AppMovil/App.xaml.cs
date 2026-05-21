@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GestionITM.AppMovil
 {
@@ -7,8 +10,11 @@ namespace GestionITM.AppMovil
 		public App()
 		{
 			InitializeComponent();
+		}
 
-			MainPage = new AppShell();
+		protected override Window CreateWindow(IActivationState? activationState)
+		{
+			return new Window(new AppShell());
 		}
 	}
 }

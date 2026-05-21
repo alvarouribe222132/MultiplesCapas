@@ -1,36 +1,40 @@
-﻿using Microsoft.Extensions.Logging;
-using GestionITM.AppMovil.Handlers; // Asegúrate de tener el namespace correcto para AuthHandler
+﻿using GestionITM.AppMovil.Views;
 using GestionITM.AppMovil.ViewModels;
+using Microsoft.Extensions.Logging;
+//using Android.Webkit;
+//using Android.App;
+using GestionITM.AppMovil.Handlers;
 
-namespace GestionITM.AppMovil
-{
+namespace GestionITM.AppMovil;
 	public static class MauiProgram
 	{
 		public static MauiApp CreateMauiApp()
 		{
 			var builder = MauiApp.CreateBuilder();
-			builder.UseMauiApp<App>().ConfigureFonts(fonts =>
+			builder
+				.UseMauiApp<App>()
+				.ConfigureFonts(fonts =>
+				{
+					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+					fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+				});
+
+		// REGISTRAR HANDLER
+		builder.Services.AddTransient<AuthHandler>();
+		// HTTP CLIENT
+		builder.Services.AddHttpClient("GestionITMApi", client =>
 			{
-				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-			}		
-			);
+				client.BaseAddress =new Uri("http://10.0.2.2:7123/api/");
+			}).AddHttpMessageHandler<AuthHandler>();
 
-			// Registrar el Handler
-			builder.Services.AddTransient<AuthHandler>();
-
-			// Configurar el HttpClient con el Handler
-			builder.Services.AddHttpClient("GestionITMApi", client =>
-			{
-				// OJO: Si usas Android Emulator, localhost es 10.0.2.2
-				client.BaseAddress = new Uri("https://10.0.2.2:7123/api/");
-			})
-			.AddHttpMessageHandler<AuthHandler>();
-
-			// PAGINAS
+			// ===  INYECCIÓN DE DEPENDENCIAS ===
+			// Usamos AddTransient para que cada vez  que entremos a la pantalla,
+			// nazca una versión fresca y limpia de la vista y de su cerebro (ViewModel).
+			builder.Services.AddTransient<ProfesoresPage>();
+			builder.Services.AddTransient<ProfesoresViewModel>();
 			builder.Services.AddTransient<LoginView>();
 			builder.Services.AddTransient<CatalogoView>();
 
-			return builder.Build();
+		return builder.Build();
 		}
 	}
-}

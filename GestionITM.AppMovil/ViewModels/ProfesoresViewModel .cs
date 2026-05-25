@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GestionITM.AppMovil.Models;
+using System.Threading.Tasks;
 
 namespace GestionITM.AppMovil.ViewModels
 {
@@ -14,7 +15,7 @@ namespace GestionITM.AppMovil.ViewModels
 		// Regla de oro 2: Usar ObservableCollection, NUNCA List.
 		// Una lista normal no le avisa a la pantalla cuando se agrega un dato.
 		//ObservableCollection<ProfesorModel> ListaProfesores {get; set;}
-		public ObservableCollection<ProfesorModel> ListaProfesores { get; set; }
+		public ObservableCollection<ProfesorModel> ListaProfesores { get; set; } = new ObservableCollection<ProfesorModel>(); //para llamar al boton ListaProfesores.Clear()
 
 		// Regla de oro 3:  Las variables que cambian en pantalla van en MINÚSCULAS
 		// y llevan el atributo [ObservableProperty]

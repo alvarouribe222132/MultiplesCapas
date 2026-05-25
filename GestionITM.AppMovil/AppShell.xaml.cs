@@ -8,7 +8,8 @@ namespace GestionITM.AppMovil
 		{
 			InitializeComponent();
 			Routing.RegisterRoute("catalogo", typeof(CatalogoView));
-			Routing.RegisterRoute("login", typeof(LoginView));
+			//Routing.RegisterRoute("login", typeof(LoginView));
+			Routing.RegisterRoute("profesores", typeof(ProfesoresPage));
 			//MainPage = new AppShell();		
 		}
 	}

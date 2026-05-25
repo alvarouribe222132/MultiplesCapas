@@ -86,11 +86,16 @@ namespace GestionITM.AppMovil.Views
             {
                 var client = _httpClientFactory.CreateClient("GestionITMApi");
 
-                var response = await client.PostAsJsonAsync(
-                    "matricula",
-                    new { IdCurso = cursoId });
+				var body = new
+				{
+					EstudianteId = 1, // de prueba por el momento, luego se obtiene del contexto de usuario
+					CursoId = cursoId,
+					Periodo = "2025-1"
+				};
 
-                if (response.IsSuccessStatusCode)
+				var response = await client.PostAsJsonAsync("Matricula", body);
+
+				if (response.IsSuccessStatusCode)
                 {
                     await DisplayAlertAsync("Éxito", "Matrícula realizada", "Genial");
                 }
@@ -99,13 +104,18 @@ namespace GestionITM.AppMovil.Views
                     var errorContent = await response.Content.ReadAsStringAsync();
                     await DisplayAlertAsync("Aviso", errorContent, "Entendido");
                 }
-                else
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     // CORRECCIÓN: DisplayAlert se puede llamar directamente desde
                     // ContentPage en cualquier contexto. MainThread.InvokeOnMainThreadAsync
                     // es innecesario aquí y genera advertencias.
-                    await DisplayAlertAsync("Error", "Algo salió mal", "OK");
-                }
+                    await DisplayAlertAsync("Error", "Sesión expirada. Inicia sesión nuevamente", "OK");
+					await Shell.Current.GoToAsync("//login");
+				}
+                else 
+                {
+					await DisplayAlertAsync("Error", "Algo salió mal. Intenta nuevamente", "OK");
+				}
             }
             catch (Exception ex)
             {

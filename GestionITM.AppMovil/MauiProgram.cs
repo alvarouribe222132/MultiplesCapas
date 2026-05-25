@@ -24,16 +24,20 @@ namespace GestionITM.AppMovil;
 		// HTTP CLIENT
 		builder.Services.AddHttpClient("GestionITMApi", client =>
 			{
-				client.BaseAddress =new Uri("http://10.0.2.2:7123/api/");
+				client.BaseAddress =new Uri("http://10.0.2.2:5144/api/");
+				client.Timeout = TimeSpan.FromSeconds(30);
 			}).AddHttpMessageHandler<AuthHandler>();
 
 			// ===  INYECCIÓN DE DEPENDENCIAS ===
 			// Usamos AddTransient para que cada vez  que entremos a la pantalla,
 			// nazca una versión fresca y limpia de la vista y de su cerebro (ViewModel).
-			builder.Services.AddTransient<ProfesoresPage>();
-			builder.Services.AddTransient<ProfesoresViewModel>();
 			builder.Services.AddTransient<LoginView>();
 			builder.Services.AddTransient<CatalogoView>();
+			builder.Services.AddTransient<ProfesoresViewModel>();
+			builder.Services.AddTransient<ProfesoresPage>();
+		
+		//builder.Services.AddTransient<ProfesoresViewModel>();
+
 
 		return builder.Build();
 		}

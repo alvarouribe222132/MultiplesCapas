@@ -10,13 +10,13 @@ namespace GestionITM.AppMovil.Views
 	public partial class MatriculasPage : ContentPage
 	{
 		private readonly IHttpClientFactory _httpClientFactory;
-		private ObservableCollection<MatriculaDto> ListaMatriculas = new();
+		public ObservableCollection<MatriculaDto> ListaMatriculas { get; set; } = new();
 
 		public MatriculasPage(IHttpClientFactory httpClientFactory)
 		{
 			InitializeComponent();
 			_httpClientFactory = httpClientFactory;
-			MatriculasCollection.ItemsSource = ListaMatriculas;
+			BindingContext = this;
 		}
 
 		protected override async void OnAppearing()
@@ -44,4 +44,5 @@ namespace GestionITM.AppMovil.Views
 			}
 		}
 	}
+
 }

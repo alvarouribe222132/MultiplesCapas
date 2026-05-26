@@ -19,8 +19,9 @@ namespace GestionITM.AppMovil;
 					fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 				});
 
-		// REGISTRAR HANDLER
+		// REGISTRAR HANDLER JWT
 		builder.Services.AddTransient<AuthHandler>();
+		builder.Services.AddTransient<LoginView>();
 		// HTTP CLIENT
 		builder.Services.AddHttpClient("GestionITMApi", client =>
 			{
@@ -28,19 +29,19 @@ namespace GestionITM.AppMovil;
 				client.Timeout = TimeSpan.FromSeconds(30);
 			}).AddHttpMessageHandler<AuthHandler>();
 
-			// ===  INYECCIÓN DE DEPENDENCIAS ===
-			// Usamos AddTransient para que cada vez  que entremos a la pantalla,
-			// nazca una versión fresca y limpia de la vista y de su cerebro (ViewModel).
-			builder.Services.AddTransient<LoginView>();
-			builder.Services.AddTransient<CatalogoView>();
+		builder.Services.AddTransient<ProfesoresViewModel>();
+
+		// ===  INYECCIÓN DE DEPENDENCIAS ===
+		// Usamos AddTransient para que cada vez  que entremos a la pantalla,
+		// nazca una versión fresca y limpia de la vista y de su cerebro (ViewModel).
+
+		builder.Services.AddTransient<ProfesoresPage>();
+		builder.Services.AddTransient<CatalogoView>();
 		builder.Services.AddTransient<EstudiantesPage>();
 		builder.Services.AddTransient<MatriculasPage>();
-		builder.Services.AddTransient<ProfesoresPage>();
-		builder.Services.AddTransient<ProfesoresViewModel>();
-			
-		
-		//builder.Services.AddTransient<ProfesoresViewModel>();
 
+		builder.Logging.AddDebug();
+		
 
 		return builder.Build();
 		}

@@ -9,5 +9,6 @@ namespace GestionITM.Domain.Dtos
 
 		public string Estado { get; set; } = string.Empty;
 		public int MatriculaId { get; set; }
+		public string NombreEstudiante { get; set; } = string.Empty;
 	}
 }

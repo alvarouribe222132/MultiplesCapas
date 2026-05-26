@@ -73,7 +73,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\EditorProfesorPage.xaml.cs">
+	    <DependentUpon>EditorProfesorPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Views\CatalogoView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EditorProfesorPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EstudiantesPage.xaml">

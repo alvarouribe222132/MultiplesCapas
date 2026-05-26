@@ -64,7 +64,11 @@ namespace GestionITM.AppMovil.Views
             }
         }
 
-        private async void OnRemainingItemsThresholdReached(object? sender, EventArgs e)
+		private async void OnNuevoCursoClicked(object sender, EventArgs e)
+		{
+			await DisplayAlertAsync("Nuevo Curso","Abrir formulario de creación","OK");
+		}
+		private async void OnRemainingItemsThresholdReached(object? sender, EventArgs e)
         {
             await CargarCursos();
         }
@@ -122,6 +126,7 @@ namespace GestionITM.AppMovil.Views
                 // CORRECCIÓN: igual que arriba, DisplayAlert directo evita las advertencias.
                 await DisplayAlertAsync("Error", ex.Message, "OK");
             }
+
         }
     }
 }

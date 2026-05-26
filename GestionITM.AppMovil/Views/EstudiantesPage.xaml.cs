@@ -1,9 +1,9 @@
-﻿using System;
+﻿using GestionITM.AppMovil.Models;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using GestionITM.AppMovil.Models;
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
+using System.Text;
 
 namespace GestionITM.AppMovil.Views
 {
@@ -42,7 +42,73 @@ namespace GestionITM.AppMovil.Views
 				await DisplayAlertAsync("Error", ex.Message, "OK");
 			}
 		}
+		private async void OnEditarClicked(object sender, EventArgs e)
+		{
+			var button = sender as Button;
+			var estudiante = button?.BindingContext as EstudianteDto;
+			if (estudiante == null) return;
 
+			// usando el helper que creamos para pedir el nombre
+			string nuevoNombre = await DisplayPromptAsync("Editar Estudiante", "Nombre completo:", estudiante.NombreCompleto) ?? "";
+			if (string.IsNullOrWhiteSpace(nuevoNombre)) return;
+
+			try
+			{
+				var client = _httpClientFactory.CreateClient("GestionITMApi");
+
+				// se Crea el objeto con los datos actualizados
+				var body = new
+				{
+					Id = estudiante.Id,
+					Nombre = nuevoNombre,
+					Telefono = estudiante.Telefono
+				};
+
+				var response = await client.PutAsJsonAsync($"estudiante/{estudiante.Id}", body);
+
+				if (response.IsSuccessStatusCode)
+				{
+					await DisplayAlertAsync("Éxito", "Estudiante actualizado correctamente", "OK");
+					// Llamar al método del ViewModel para refrescar la lista
+					await CargarEstudiantes();
+				}
+				else
+				{
+					await DisplayAlertAsync("Error", "No se pudo actualizar el estudiante", "OK");
+				}
+			}
+			catch (Exception ex)
+			{
+				await DisplayAlertAsync("Error", ex.Message, "OK");
+			}
+		}
+
+		private async void OnEliminarClicked(object sender, EventArgs e)
+		{
+			var button = sender as Button;
+			var estudiante = button?.BindingContext as EstudianteDto;
+			if (estudiante == null) return;
+
+			bool confirmar = await DisplayAlertAsync("Eliminar", $"¿Estás seguro de eliminar a {estudiante.NombreCompleto}?", "Sí", "No");
+			if (!confirmar) return;
+
+			try
+			{
+				var client = _httpClientFactory.CreateClient("GestionITMApi");
+				var response = await client.DeleteAsync($"estudiante/{estudiante.Id}");
+
+				if (response.IsSuccessStatusCode)
+				{
+					await DisplayAlertAsync("Éxito", "Estudiante eliminado", "OK");
+					await CargarEstudiantes();
+				}
+			}
+			catch (Exception ex)
+			{
+				await DisplayAlertAsync("Error", ex.Message, "OK");
+			}
+
+		}
 		private async void OnAgregarClicked(object sender, EventArgs e)
 		{
 			string nombre = await DisplayPromptAsync("Nuevo Estudiante", "Nombre completo:");

@@ -7,8 +7,16 @@ namespace GestionITM.AppMovil.Models
 	// Solo propiedades puras, cero lógica visual
 	public class ProfesorModel
 	{
-		public int Id { get; set; }
-		public string Nombre { get; set; }
-		public string Especialidad { get; set; }
+		public int ProfesorId { get; set; }
+
+		public string NombreCompleto { get; set; } = string.Empty;
+
+		public string Correo { get; set; } = string.Empty;
+
+		public string Especialidad { get; set; } = string.Empty;
+
+		public string Documento { get; set; } = string.Empty;
+
+		public string Telefono { get; set; } = string.Empty;
 	}
 }

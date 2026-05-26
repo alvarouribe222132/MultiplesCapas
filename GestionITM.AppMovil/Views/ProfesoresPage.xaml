@@ -5,28 +5,56 @@
              xmlns:models="clr-namespace:GestionITM.AppMovil.Models"
              x:Class="GestionITM.AppMovil.Views.ProfesoresPage"
              x:DataType="viewmodels:ProfesoresViewModel"
-             Title="{Binding TituloPantalla}">
+             Title="Profesores ITM">
 
-	<Grid RowDefinitions="Auto, *" Padding="20">
+	<Grid RowDefinitions="Auto, *, Auto" Padding="10">
 
-		<ActivityIndicator Grid.Row="0" 
-    IsRunning="{Binding EstaCargando}"
-    IsVisible="{Binding EstaCargando}"
-    Color="Blue" />
+		<ActivityIndicator Grid.Row="0"
+							IsRunning="{Binding EstaCargando}"
+							IsVisible="{Binding EstaCargando}"
+							Color="Blue" />
 
 		<CollectionView Grid.Row="1" ItemsSource="{Binding ListaProfesores}">
 			<CollectionView.ItemTemplate>
 				<DataTemplate x:DataType="models:ProfesorModel">
-					<Frame Margin="0,5" Padding="10" BorderColor="LightGray">
-						<VerticalStackLayout>
-							<Label Text="{Binding Nombre}" FontSize="18" FontAttributes="Bold" />
-							<Label Text="{Binding Especialidad}" FontSize="14" TextColor="Gray" />
-						</VerticalStackLayout>
-					</Frame>
+					<Border Margin="5" Padding="10" Stroke="LightGray" StrokeThickness="1">
+						<Border.StrokeShape>
+							<RoundRectangle CornerRadius="5" />
+						</Border.StrokeShape>
+					
+					<Grid ColumnDefinitions="*, Auto, Auto, Auto">
+							<!-- Info -->
+							<VerticalStackLayout Grid.Column="0">
+								<VerticalStackLayout.GestureRecognizers>
+									<TapGestureRecognizer Tapped="OnVerDetalleClicked"/>
+								</VerticalStackLayout.GestureRecognizers>
+								<Label Text="{Binding NombreCompleto}"
+                                       FontSize="16" FontAttributes="Bold"/>
+								<Label Text="{Binding Especialidad}"
+                                       FontSize="13" TextColor="Gray"/>
+								<Label Text="{Binding Correo}"
+                                       FontSize="12" TextColor="DarkBlue"/>
+							</VerticalStackLayout>
+
+							<!-- Botones -->
+							<Button Grid.Column="1" Text="👁️"
+                                    BackgroundColor="DarkBlue" TextColor="White"
+                                    Clicked="OnVerDetalleClicked" Margin="3,0"/>
+							<Button Grid.Column="2" Text="✏️"
+                                    BackgroundColor="Orange" TextColor="White"
+                                    Clicked="OnEditarClicked" Margin="3,0"/>
+							<Button Grid.Column="3" Text="🗑️"
+                                    BackgroundColor="Red" TextColor="White"
+                                    Clicked="OnEliminarClicked"/>
+						</Grid>
+					</Border>
 				</DataTemplate>
 			</CollectionView.ItemTemplate>
 		</CollectionView>
+		<Button Grid.Row="2" Text="➕ Agregar Profesor"
+                Clicked="OnAgregarClicked"
+                BackgroundColor="Purple" TextColor="White"
+                Margin="0,10,0,0"/>
 
 	</Grid>
 </ContentPage>
-                        

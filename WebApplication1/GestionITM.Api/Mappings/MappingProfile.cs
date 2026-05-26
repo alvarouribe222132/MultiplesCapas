@@ -9,22 +9,34 @@ namespace GestionITM.Api.Mappings
 	{
 		public MappingProfile() 
 		{
+		//para Estudiantes y Profesores, conect
 			CreateMap<Estudiante, EstudianteDto>() //las siguentes 2 loneas se colocan par corregir el problem del mapeo de los ID de los estudiantes
 			.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.EstudianteId))
 			.ForMember(dest => dest.NombreCompleto, opt => opt.MapFrom(src => src.Name));
+
 			CreateMap<EstudianteCreateDto, Estudiante>()
 			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Nombre)); // ← conectar Nombre → Name
 
 			CreateMap<EstudianteUpdateDto, Estudiante>()  // ← para conectar los nombres dispares
+			.ForMember(dest => dest.EstudianteId, opt => opt.MapFrom(src => src.EstudianteId))
 			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Nombre))
 			.ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono));
 
+			//para profesores
 			CreateMap<Profesor, ProfesorDto>()
 			.ForMember(dest => dest.NombreCompleto,	opt => opt.MapFrom(src => src.Name));
+
 			CreateMap<ProfesorCreateDto, Profesor>()
 			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.NombreCompleto));
 
+			CreateMap<ProfesorUpdateDto, Profesor>()
+			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.NombreCompleto))
+			.ForMember(dest => dest.Especialidad, opt => opt.MapFrom(src => src.Especialidad))
+			.ForMember(dest => dest.Documento, opt => opt.MapFrom(src => src.Documento))
+			.ForMember(dest => dest.Correo, opt => opt.MapFrom(src => src.Correo))
+			.ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono));
 
+			//para matriculas
 			CreateMap<Matricula, MatriculaDto>()
 			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Curso.Nombre))
 			.ForMember(dest => dest.NombreEstudiante,opt => opt.MapFrom(src => src.Estudiante.Name));
@@ -32,9 +44,11 @@ namespace GestionITM.Api.Mappings
 
 			CreateMap<MatriculaCreateDto, Matricula>();
 
-			CreateMap<MatriculaUpdateDto, Matricula>();
+			CreateMap<MatriculaUpdateDto, Matricula>()
+			.ForMember(dest => dest.Estudiante, opt => opt.MapFrom(src => src.NombreEstudiante));
 
 
+			//para cursos 
 			CreateMap<Curso, CursoDto>()
 			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Nombre)) //esto con el fin de que cuando se haga un Get se muestre el nombre del curso (CursoDto = Curso.cs )
 			.ForMember(dest => dest.NombreProfesor, opt => opt.MapFrom(src => src.Profesor != null ? src.Profesor.Name : "Sin Profesor"))

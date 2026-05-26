@@ -1,34 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
 <Shell
     x:Class="GestionITM.AppMovil.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:GestionITM.AppMovil.Views"
-    Shell.NavBarIsVisible="False">
+    Shell.FlyoutBehavior="Flyout">
 
-	<ShellContent
-        Route="login"
-        ContentTemplate="{DataTemplate views:LoginView}" />
-	<!-- Menú principal -->
-	<TabBar Route="main">
-		<Tab Title="📚 Cursos" Icon="course.png">
-			<ShellContent
-                Route="catalogo"
-                ContentTemplate="{DataTemplate views:CatalogoView}" />
-		</Tab>
-		<Tab Title="👨‍🎓 Estudiantes">
-			<ShellContent Route="estudiantes"
-                ContentTemplate="{DataTemplate views:EstudiantesPage}" />
-		</Tab>
-		<Tab Title="📋 Matrículas">
-			<ShellContent Route="matriculas"
-                ContentTemplate="{DataTemplate views:MatriculasPage}" />
-		</Tab>
-		<Tab Title="👨‍🏫 Profesores" Icon="teacher.png">
-			<ShellContent
-                Route="profesores"
-                ContentTemplate="{DataTemplate views:ProfesoresPage}" />
-		</Tab>
-	</TabBar>
+	<Shell.FlyoutHeader>
+		<Grid BackgroundColor="#512BD4"
+              HeightRequest="150">
+
+			<Label Text="GESTIÓN ITM"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   TextColor="White"
+                   FontSize="24"
+                   FontAttributes="Bold"/>
+		</Grid>
+	</Shell.FlyoutHeader>
+
+	<FlyoutItem Title="Profesores"
+                 Icon="icon_prof.png">
+
+		<ShellContent
+            Route="profesores"
+            ContentTemplate="{DataTemplate views:ProfesoresPage}" />
+
+	</FlyoutItem>
+
+	<FlyoutItem Title="Estudiantes"
+                 Icon="icon_est.png">
+
+		<ShellContent
+            Route="estudiantes"
+            ContentTemplate="{DataTemplate views:EstudiantesPage}" />
+
+	</FlyoutItem>
+
+	<FlyoutItem Title="Cursos"
+                 Icon="icon_curso.png">
+
+		<ShellContent
+            Route="catalogo"
+            ContentTemplate="{DataTemplate views:CatalogoView}" />
+
+	</FlyoutItem>
+
+	<FlyoutItem Title="Matrículas"
+                 Icon="icon_mat.png">
+
+		<ShellContent
+            Route="matriculas"
+            ContentTemplate="{DataTemplate views:MatriculasPage}" />
+
+	</FlyoutItem>
 
 </Shell>

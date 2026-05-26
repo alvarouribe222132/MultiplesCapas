@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GestionITM.AppMovil.Models;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq.Expressions;
+using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace GestionITM.AppMovil.ViewModels
 {
 	// Regla de oro 1: La clase debe ser partial y heredadr de ObservableObject
 		public partial class ProfesoresViewModel : ObservableObject
 	{
+		private readonly IHttpClientFactory _httpClientFactory;
 		// Regla de oro 2: Usar ObservableCollection, NUNCA List.
 		// Una lista normal no le avisa a la pantalla cuando se agrega un dato.
 		//ObservableCollection<ProfesorModel> ListaProfesores {get; set;}
@@ -25,11 +29,14 @@ namespace GestionITM.AppMovil.ViewModels
 		[ObservableProperty]
 		private bool estaCargando;
 
-		public ProfesoresViewModel()
+		public ProfesoresViewModel(IHttpClientFactory httpClientFactory)
 		{
+			_httpClientFactory = httpClientFactory;
 			ListaProfesores = new ObservableCollection<ProfesorModel>();
+
 			// para cargar automaticamente la lista de profesores
-			CargarProfesoresCommand.Execute(null);
+			//CargarProfesoresCommand.Execute(null);
+			_ = CargarProfesoresAsync();
 		}
 
 		// Regla de oro 4:  Los botones no llaman métodos normales , llaman "Comandos".
@@ -43,17 +50,26 @@ namespace GestionITM.AppMovil.ViewModels
 
 			try
 			{
+				var cliente = _httpClientFactory.CreateClient("GestionITMApi");
+				//Intentamos traer los datos reales
+				var datos = await cliente.GetFromJsonAsync<List<ProfesorModel>>("Profesor");
+
 				// Simulamos una demora de red (Ir a buscar a la API)
 				await Task.Delay(2000);
 
 				// Agregamos datos falsos por el momento
 				ListaProfesores.Clear();
-				ListaProfesores.Add(new ProfesorModel { Id = 1, Nombre = "Daniel Villamizar", Especialidad = "Backend y Arquitectura Cloud" });
-				ListaProfesores.Add(new ProfesorModel { Id = 2, Nombre = "Sara Quimbayo", Especialidad = "Arquitectura" });
-				ListaProfesores.Add(new ProfesorModel { Id = 3, Nombre = "Thomas Reyes", Especialidad = "Seguridad" });
-
-				TituloPantalla = $"Se cargaron {ListaProfesores.Count} profesores";
+				foreach (var p in datos)
+				{
+					ListaProfesores.Add(p);
+				}
 			}
+			catch (Exception ex)
+
+			{
+				Console.WriteLine($"Error al cargar profesores: {ex.Message}");
+			}
+
 			finally
 			{
 				EstaCargando = false; // Apagamos la ruedita de carga

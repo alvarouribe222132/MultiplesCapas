@@ -1,7 +1,15 @@
 ﻿<ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="GestionITM.AppMovil.Views.CatalogoView">
+	xmlns:models="clr-namespace:GestionITM.AppMovil.Models"
+    x:Class="GestionITM.AppMovil.Views.CatalogoView"
+	Title="Cursos Disponibles">
+
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Text="nuevo_curso.png" 
+			Clicked="OnNuevoCursoClicked" 
+			Priority="0" />
+		</ContentPage.ToolbarItems>
 
 	<CollectionView
         x:Name="CursosCollection"
@@ -9,30 +17,57 @@
         RemainingItemsThresholdReached="OnRemainingItemsThresholdReached">
 
 		<CollectionView.ItemTemplate>
-			<DataTemplate>
+			<DataTemplate x:DataType="models:CursoDto">
 
-				<Frame Margin="10">
+				<Border Margin="5" Padding="12" Stroke="LightGray" StrokeThickness="1">
+					<Border.StrokeShape>
+						<RoundRectangle CornerRadius="8" />
+					</Border.StrokeShape>
 
-					<VerticalStackLayout>
-
-						<Label
+					<Grid RowDefinitions="Auto,Auto,Auto,Auto">
+						<!-- Nombre del curso -->
+						<Label Grid.Row="0"
                             Text="{Binding NombreCurso}"
-                            FontSize="20"
+                            FontSize="18"
                             FontAttributes="Bold"/>
+						<!-- Profesor -->
+						<Label Grid.Row="1"
+                            Text="{Binding NombreProfesor}"
+							FontSize="14"
+							TextColor="Gray"/>
+						<!-- Créditos y cupos -->
+						<HorizontalStackLayout Grid.Row="2" Margin="0,5,0,5" Spacing="15">
+							<Label FontSize="13" TextColor="DarkBlue">
+								<Label.FormattedText>
+									<FormattedString>
+										<Span Text="📚 " />
+										<Span Text="{Binding Creditos}" FontAttributes="Bold"/>
+										<Span Text=" créditos" />
+									</FormattedString>
+								</Label.FormattedText>
+							</Label>
 
-						<Label
-                            Text="{Binding NombreProfesor}"/>
+							<Label FontSize="13" TextColor="DarkGreen">
+								<Label.FormattedText>
+									<FormattedString>
+										<Span Text="🪑 " />
+										<Span Text="{Binding CuposDisponibles}" FontAttributes="Bold"/>
+										<Span Text=" cupos Disponibles" />
+									</FormattedString>
+								</Label.FormattedText>
+							</Label>
+						</HorizontalStackLayout>
 
-						<Label
-                            Text="{Binding Creditos}"/>
+						<!-- Botón matricular -->
+						<Button Grid.Row="3"
+                                Text="Matricular"
+                                Clicked="OnMatricularClicked"
+                                BackgroundColor="Green"
+                                TextColor="White"
+								CornerRadius="5"/>
+					</Grid>
 
-						<Button
-                            Text="Matricular"
-                            Clicked="OnMatricularClicked"/>
-
-					</VerticalStackLayout>
-
-				</Frame>
+				</Border>
 
 			</DataTemplate>
 		</CollectionView.ItemTemplate>

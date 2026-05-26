@@ -33,8 +33,11 @@ namespace GestionITM.AppMovil;
 			// nazca una versión fresca y limpia de la vista y de su cerebro (ViewModel).
 			builder.Services.AddTransient<LoginView>();
 			builder.Services.AddTransient<CatalogoView>();
-			builder.Services.AddTransient<ProfesoresViewModel>();
-			builder.Services.AddTransient<ProfesoresPage>();
+		builder.Services.AddTransient<EstudiantesPage>();
+		builder.Services.AddTransient<MatriculasPage>();
+		builder.Services.AddTransient<ProfesoresPage>();
+		builder.Services.AddTransient<ProfesoresViewModel>();
+			
 		
 		//builder.Services.AddTransient<ProfesoresViewModel>();
 

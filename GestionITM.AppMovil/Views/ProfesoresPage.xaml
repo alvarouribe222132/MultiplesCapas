@@ -7,7 +7,7 @@
              x:DataType="viewmodels:ProfesoresViewModel"
              Title="{Binding TituloPantalla}">
 
-	<Grid RowDefinitions="Auto, *, Auto" Padding="20">
+	<Grid RowDefinitions="Auto, *" Padding="20">
 
 		<ActivityIndicator Grid.Row="0" 
     IsRunning="{Binding EstaCargando}"
@@ -27,10 +27,6 @@
 			</CollectionView.ItemTemplate>
 		</CollectionView>
 
-		<Button Grid.Row="2"
-                                    Text="Descargar Profesores"
-                                    Command="{Binding CargarProfesoresCommand}"
-                                    Margin="0,20,0,0" />
 	</Grid>
 </ContentPage>
                         

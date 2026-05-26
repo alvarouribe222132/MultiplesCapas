@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestionITM.AppMovil.Views.MatriculasPage"
+             Title="Matrículas">
+
+	<CollectionView x:Name="MatriculasCollection" Margin="10">
+		<CollectionView.ItemTemplate>
+			<DataTemplate>
+				<Frame Margin="5" Padding="10" BorderColor="LightGray">
+					<VerticalStackLayout>
+						<Label Text="{Binding NombreEstudiante}"
+                               FontSize="16" FontAttributes="Bold"/>
+						<Label Text="{Binding NombreCurso}"
+                               FontSize="14" TextColor="Gray"/>
+						<Label Text="{Binding Estado}"
+                               FontSize="12" TextColor="Purple"/>
+					</VerticalStackLayout>
+				</Frame>
+			</DataTemplate>
+		</CollectionView.ItemTemplate>
+	</CollectionView>
+</ContentPage>

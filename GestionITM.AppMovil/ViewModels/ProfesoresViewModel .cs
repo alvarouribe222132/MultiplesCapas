@@ -27,7 +27,9 @@ namespace GestionITM.AppMovil.ViewModels
 
 		public ProfesoresViewModel()
 		{
-			// (En la próxima clase llamaremos a la API aquí)
+			ListaProfesores = new ObservableCollection<ProfesorModel>();
+			// para cargar automaticamente la lista de profesores
+			CargarProfesoresCommand.Execute(null);
 		}
 
 		// Regla de oro 4:  Los botones no llaman métodos normales , llaman "Comandos".

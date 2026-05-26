@@ -9,14 +9,22 @@
 	<ShellContent
         Route="login"
         ContentTemplate="{DataTemplate views:LoginView}" />
-
+	<!-- Menú principal -->
 	<TabBar Route="main">
-		<Tab Title="Cursos" Icon="course.png">
+		<Tab Title="📚 Cursos" Icon="course.png">
 			<ShellContent
                 Route="catalogo"
                 ContentTemplate="{DataTemplate views:CatalogoView}" />
 		</Tab>
-		<Tab Title="Profesores" Icon="teacher.png">
+		<Tab Title="👨‍🎓 Estudiantes">
+			<ShellContent Route="estudiantes"
+                ContentTemplate="{DataTemplate views:EstudiantesPage}" />
+		</Tab>
+		<Tab Title="📋 Matrículas">
+			<ShellContent Route="matriculas"
+                ContentTemplate="{DataTemplate views:MatriculasPage}" />
+		</Tab>
+		<Tab Title="👨‍🏫 Profesores" Icon="teacher.png">
 			<ShellContent
                 Route="profesores"
                 ContentTemplate="{DataTemplate views:ProfesoresPage}" />

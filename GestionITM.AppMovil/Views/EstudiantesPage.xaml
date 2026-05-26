@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestionITM.AppMovil.Views.EstudiantesPage"
+             Title="Estudiantes ITM">
+
+	<Grid RowDefinitions="*, Auto" Padding="10">
+
+		<CollectionView x:Name="EstudiantesCollection" Grid.Row="0">
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Frame Margin="5" Padding="10" BorderColor="LightGray">
+						<Grid ColumnDefinitions="*, Auto, Auto">
+							<VerticalStackLayout Grid.Column="0">
+								<Label Text="{Binding NombreCompleto}"
+                                   FontSize="16" FontAttributes="Bold"/>
+								<Label Text="{Binding Correo}"
+                                   FontSize="13" TextColor="Gray"/>
+							</VerticalStackLayout>
+							<Button Grid.Column="1"
+                                    Text="✏️"
+                                    BackgroundColor="Orange"
+                                    TextColor="White"
+                                    Clicked="OnEditarClicked"
+                                    Margin="5,0"/>
+							<Button Grid.Column="2"
+                                    Text="🗑️"
+                                    BackgroundColor="Red"
+                                    TextColor="White"
+                                    Clicked="OnEliminarClicked"/>
+						</Grid>
+					</Frame>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<Button Grid.Row="1"
+                Text="➕Agregar Estudiante"
+                Clicked="OnAgregarClicked"
+				BackgroundColor="Purple"
+                TextColor="White"
+                Margin="0,10,0,0"/>
+	</Grid>
+</ContentPage>

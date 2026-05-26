@@ -49,7 +49,7 @@ namespace GestionITM.AppMovil.Views
 					}
 
 					await SecureStorage.SetAsync("auth_token",result!.Token);
-					await Shell.Current.GoToAsync("//catalogo");
+					await Shell.Current.GoToAsync("//main");
 				}
 				else
 				{

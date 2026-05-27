@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestionITM.AppMovil.Views.EditarCursoPage"
+             Title="Editar Curso">
+	<ScrollView>
+		<VerticalStackLayout Padding="20" Spacing="10">
+			<Label Text="Modificar Información del Curso"
+                   FontSize="20" FontAttributes="Bold"
+                   HorizontalOptions="Center" Margin="0,0,0,20"/>
+
+			<Label Text="Nombre del Curso" FontAttributes="Bold" TextColor="Gray"/>
+			<Entry x:Name="txtNombre" Placeholder="Nombre del Curso"/>
+
+			<Label Text="Código" FontAttributes="Bold" TextColor="Gray"/>
+			<Entry x:Name="txtCodigo" Placeholder="Código"/>
+
+			<Label Text="Créditos" FontAttributes="Bold" TextColor="Gray"/>
+			<Entry x:Name="txtCreditos" Placeholder="Créditos" Keyboard="Numeric"/>
+
+			<Label Text="Cupos Disponibles" FontAttributes="Bold" TextColor="Gray"/>
+			<Entry x:Name="txtCupos" Placeholder="Cupos Disponibles" Keyboard="Numeric"/>
+
+			<Button Text="Guardar Cambios"
+                    Clicked="OnGuardarClicked"
+                    BackgroundColor="Green"
+                    TextColor="White"
+                    Margin="0,20,0,0"/>
+
+			<Button Text="Cancelar"
+                    Clicked="OnCancelarClicked"
+                    BackgroundColor="Gray"
+                    TextColor="White"/>
+		</VerticalStackLayout>
+	</ScrollView>
+</ContentPage>

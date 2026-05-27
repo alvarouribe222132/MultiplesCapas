@@ -21,5 +21,7 @@ namespace GestionITM.Domain.Dtos
 		public int Creditos { get; set; }
 
 		public int ProfesorId { get; set; }
+
+		public int CuposDisponibles { get; set; }
 	}
 }

@@ -206,7 +206,8 @@ namespace GestionITM.AppMovil.Views
 			var curso = (sender as Button)?.BindingContext as CursoDto;
 			if (curso == null) return;
 			// para abrirías una página de edición 
-			await DisplayAlertAsync("Editar", $"Editar curso: {curso.NombreCurso}", "OK");
+			await Navigation.PushAsync(new EditarCursoPage(curso, _httpClientFactory)); 
+			//DisplayAlertAsync("Editar", $"Editar curso: {curso.NombreCurso}", "OK");
 		}
 
 		private async void OnInactivarCursoClicked(object sender, EventArgs e)
@@ -216,11 +217,7 @@ namespace GestionITM.AppMovil.Views
 			if (curso == null)
 				return;
 
-			bool confirmar = await DisplayAlertAsync(
-				"Confirmar",
-				"¿Desea inactivar este curso?",
-				"Sí",
-				"No");
+			bool confirmar = await DisplayAlertAsync("Confirmar", $"¿Inactivar {curso.NombreCurso}?", "Sí","No");
 
 			if (!confirmar)
 				return;
@@ -228,6 +225,8 @@ namespace GestionITM.AppMovil.Views
 			try
 			{
 				var client = _httpClientFactory.CreateClient("GestionITMApi");
+
+
 
 				// Enviar actualización al backend
 				var body = new
@@ -242,16 +241,11 @@ namespace GestionITM.AppMovil.Views
 					Estado = "Inactivo"
 				};
 
-				var response = await client.PutAsJsonAsync(
-					$"Curso/{curso.IdCurso}",
-					body);
+				var response = await client.PutAsJsonAsync($"Curso/{curso.IdCurso}",body);
 
 				if (response.IsSuccessStatusCode)
 				{
-					await DisplayAlertAsync(
-						"Éxito",
-						"Curso inactivado correctamente",
-						"OK");
+					await DisplayAlertAsync("Éxito","Curso inactivado correctamente","OK");
 
 					// Recargar lista
 					ListaCursos.Clear();
@@ -263,18 +257,11 @@ namespace GestionITM.AppMovil.Views
 				{
 					var error = await response.Content.ReadAsStringAsync();
 
-					await DisplayAlertAsync(
-						"Error",
-						error,
-						"OK");
-				}
+					await DisplayAlertAsync("Error",error,"OK");}
 			}
 			catch (Exception ex)
 			{
-				await DisplayAlertAsync(
-					"Error",
-					ex.Message,
-					"OK");
+				await DisplayAlertAsync("Error",ex.Message,"OK");
 			}
 		}
 

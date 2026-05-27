@@ -73,6 +73,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\GestionITM.Domain\GestionITM.Domain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="Views\EditorProfesorPage.xaml.cs">
 	    <DependentUpon>EditorProfesorPage.xaml</DependentUpon>
 	  </Compile>
@@ -80,6 +84,12 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\CatalogoView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EditarCursoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EditarMatriculaPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EditorEstudiantePage.xaml">

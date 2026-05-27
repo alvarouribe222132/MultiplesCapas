@@ -43,28 +43,34 @@ namespace GestionITM.Api.Mappings
 			//para matriculas
 			CreateMap<Matricula, MatriculaDto>()
 			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Curso != null ? src.Curso.Nombre : "N/A"))
-			.ForMember(dest => dest.NombreEstudiante, opt => opt.MapFrom(src => src.Estudiante != null ? src.Estudiante.Name : "N/A"));
+			.ForMember(dest => dest.NombreEstudiante, opt => opt.MapFrom(src => src.Estudiante != null ? src.Estudiante.Name : "N/A"))
 			//AQUI SE AGREGO != null ? src.Estudiante.Name : "Estudiante eliminado" DEBIDO A QUE HACIENDO PRUEBAS HABIA ELIMINADO REGISTROS QUE EN LA BD estaban pero en la App no se mostraban
-
+			.ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Estado))
+			.ForMember(dest => dest.Periodo, opt => opt.MapFrom(src => src.Periodo))
+			.ForMember(dest => dest.CursoId, opt => opt.MapFrom(src => src.CursoId))
+			.ForMember(dest => dest.EstudianteId, opt => opt.MapFrom(src => src.EstudianteId));
 
 			CreateMap<MatriculaCreateDto, Matricula>();
 
-			CreateMap<MatriculaUpdateDto, Matricula>()
-			.ForMember(dest => dest.Estudiante, opt => opt.MapFrom(src => src.NombreEstudiante));
+
+			CreateMap<MatriculaUpdateDto, Matricula>();
+			//.ForMember(dest => dest.Estudiante, opt => opt.MapFrom(src => src.NombreEstudiante));
 
 
 			//para cursos 
 			CreateMap<Curso, CursoDto>()
 			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Nombre)) //esto con el fin de que cuando se haga un Get se muestre el nombre del curso (CursoDto = Curso.cs )
 			.ForMember(dest => dest.NombreProfesor, opt => opt.MapFrom(src => src.Profesor != null ? src.Profesor.Name : "Sin Profesor"))
-			.ForMember(dest => dest.CuposDisponibles, opt => opt.MapFrom(src => src.CuposDisponibles));
-
+			.ForMember(dest => dest.CuposDisponibles, opt => opt.MapFrom(src => src.CuposDisponibles))
+			.ForMember(dest => dest.ProfesorId, opt => opt.MapFrom(src => src.ProfesorId));
 
 			CreateMap<CursoCreateDto, Curso>()
 			.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.NombreCurso));
 
 			CreateMap<CursoUpdateDto, Curso>()
-			.ForMember(dest => dest.Nombre,  opt => opt.MapFrom(src => src.Nombre));
+			.ForMember(dest => dest.Nombre,  opt => opt.MapFrom(src => src.Nombre))
+			.ForMember(dest => dest.CuposDisponibles,opt => opt.MapFrom(src => src.CuposDisponibles));
+
 		}
 	}
 }

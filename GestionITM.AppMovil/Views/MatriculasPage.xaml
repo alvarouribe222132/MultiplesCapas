@@ -43,7 +43,7 @@
 							<RoundRectangle CornerRadius="10"/>
 						</Border.StrokeShape>
 
-						<VerticalStackLayout Spacing="2">
+						<VerticalStackLayout Spacing="5">
 
 							<Label
                                 Text="{Binding NombreEstudiante}"
@@ -66,6 +66,25 @@
                                     Text="{Binding Periodo}"
                                     FontSize="12"
                                     TextColor="DarkBlue"/>
+
+							</HorizontalStackLayout>
+
+							<!-- BOTONES -->
+							<HorizontalStackLayout
+                                Spacing="10"
+                                Margin="0,5,0,0">
+
+								<Button
+                                    Text="✏️"
+                                    Clicked="OnEditarMatriculaClicked"
+                                    BackgroundColor="Transparent"
+                                    TextColor="Blue"/>
+
+								<Button
+                                    Text="🚫"
+                                    Clicked="OnInactivarMatriculaClicked"
+                                    BackgroundColor="Transparent"
+                                    TextColor="Red"/>
 
 							</HorizontalStackLayout>
 

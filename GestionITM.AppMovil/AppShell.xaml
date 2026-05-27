@@ -6,7 +6,7 @@
     xmlns:views="clr-namespace:GestionITM.AppMovil.Views"
     FlyoutBehavior="Flyout">
 	<Shell.FlyoutHeader>
-		<Grid BackgroundColor="#512BD4" HeightRequest="100">
+		<Grid BackgroundColor="#CEEBF5" HeightRequest="100">
 			<Label Text="MENU ITM" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontSize="20"/>
 		</Grid>
 	</Shell.FlyoutHeader>

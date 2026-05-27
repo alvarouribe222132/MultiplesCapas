@@ -78,5 +78,18 @@ namespace GestionITM.Api.Controllers
 			return Ok(new { message = "Cupos actualizados correctamente", cursoId = id, nuevosCupos });
 		}
 
+		[HttpPut("{id}")]
+		public async Task<ActionResult> PutCurso(int id, CursoUpdateDto cursoUpdateDto)
+		{
+			if (id != cursoUpdateDto.IdCurso)
+				return BadRequest(new { message = "El ID no coincide" });
+
+			var actualizado = await _service.ActualizarCursoAsync(cursoUpdateDto);
+			if (!actualizado)
+				return NotFound(new { message = $"El curso con ID {id} no existe" });
+
+			return Ok(new { message = "Curso actualizado correctamente" });
+		}
+
 	}
 }

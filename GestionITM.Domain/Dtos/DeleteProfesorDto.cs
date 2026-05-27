@@ -11,6 +11,7 @@ namespace GestionITM.Domain.Dtos
 	{
 		// Este es el que usaremos para recibir los datos
 		public int ProfesorId { get; set; }
+
 	}
 }
 

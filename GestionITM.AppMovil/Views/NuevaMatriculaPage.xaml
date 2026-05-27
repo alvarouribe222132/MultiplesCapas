@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestionITM.AppMovil.Views.NuevaMatriculaPage"
+             Title="NuevaMatriculaPage">
+	<VerticalStackLayout Padding="20" Spacing="15">
+		<Label Text="Nueva Matrícula" FontSize="24" HorizontalOptions="Center" Margin="0,0,0,20"/>
+
+		<Label Text="Seleccionar Estudiante:" FontAttributes="Bold"/>
+		<Picker x:Name="PickerEstudiantes" 
+            Title="Seleccione un estudiante"
+            ItemDisplayBinding="{Binding NombreCompleto}"/>
+		<Label Text="Seleccionar Curso:" FontAttributes="Bold"/>
+		<Picker x:Name="PickerCursos" 
+            Title="Seleccione un curso"
+            ItemDisplayBinding="{Binding NombreCurso}"/>
+		<Button Text="REGISTRAR MATRÍCULA" 
+            Clicked="OnRegistrarClicked" 
+            BackgroundColor="Blue" 
+            TextColor="White"
+            Margin="0,20,0,0"/>
+
+		<Button Text="Cancelar" 
+            Clicked="OnCancelarClicked" 
+            BackgroundColor="Transparent" 
+            TextColor="Gray"/>
+	</VerticalStackLayout>
+</ContentPage>

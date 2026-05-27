@@ -1,44 +1,92 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:models="clr-namespace:GestionITM.AppMovil.Models"
-             xmlns:viewmodels="clr-namespace:GestionITM.AppMovil.ViewModels"
-             x:Class="GestionITM.AppMovil.Views.MatriculasPage"
-             x:DataType="viewmodels:MatriculasViewModel"
-             Title="Matrículas">
 
-	<CollectionView x:Name="MatriculasCollection" 
-                    ItemsSource="{Binding ListaMatriculas}" 
-                    Margin="10">
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:GestionITM.AppMovil.Models"
+    xmlns:viewmodels="clr-namespace:GestionITM.AppMovil.ViewModels"
+    x:Class="GestionITM.AppMovil.Views.MatriculasPage"
+    x:DataType="viewmodels:MatriculasViewModel"
+    Title="Matrículas">
 
-		<CollectionView.EmptyView>
-			<Label Text="No hay matrículas registradas"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   TextColor="Gray"/>
-		</CollectionView.EmptyView>
+	<!-- CONTENEDOR PRINCIPAL -->
+	<Grid RowDefinitions="*, Auto" Padding="10">
 
-		<CollectionView.ItemTemplate>
-			<DataTemplate x:DataType="models:MatriculaDto">
-				<Border Margin="5" Padding="10" Stroke="LightGray">
-					<Border.StrokeShape>
-						<RoundRectangle CornerRadius="10"/>
-					</Border.StrokeShape>
+		<!-- LISTA -->
+		<CollectionView
+            x:Name="MatriculasCollection"
+            ItemsSource="{Binding ListaMatriculas}"
+            Grid.Row="0"
+            Margin="10">
 
-					<VerticalStackLayout Spacing="2">
-						<Label Text="{Binding NombreEstudiante}"
-                               FontSize="16" FontAttributes="Bold"/>
-						<Label Text="{Binding NombreCurso}"
-                               FontSize="14" TextColor="Gray"/>
-						<HorizontalStackLayout Spacing="10">
-							<Label Text="{Binding Estado}"
-                                   FontSize="12" TextColor="Purple"/>
-							<Label Text="{Binding Periodo}"
-                                   FontSize="12" TextColor="DarkBlue"/>
-						</HorizontalStackLayout>
-					</VerticalStackLayout>
-				</Border>
-			</DataTemplate>
-		</CollectionView.ItemTemplate>
-	</CollectionView>
+			<CollectionView.EmptyView>
+				<Label
+                    Text="No hay matrículas registradas"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    TextColor="Gray"/>
+			</CollectionView.EmptyView>
+
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="models:MatriculaDto">
+
+					<Border
+                        Margin="5"
+                        Padding="10"
+                        Stroke="LightGray">
+
+						<Border.GestureRecognizers>
+							<TapGestureRecognizer Tapped="OnMatriculaTapped"/>
+						</Border.GestureRecognizers>
+
+						<Border.StrokeShape>
+							<RoundRectangle CornerRadius="10"/>
+						</Border.StrokeShape>
+
+						<VerticalStackLayout Spacing="2">
+
+							<Label
+                                Text="{Binding NombreEstudiante}"
+                                FontSize="16"
+                                FontAttributes="Bold"/>
+
+							<Label
+                                Text="{Binding NombreCurso}"
+                                FontSize="14"
+                                TextColor="Gray"/>
+
+							<HorizontalStackLayout Spacing="10">
+
+								<Label
+                                    Text="{Binding Estado}"
+                                    FontSize="12"
+                                    TextColor="Purple"/>
+
+								<Label
+                                    Text="{Binding Periodo}"
+                                    FontSize="12"
+                                    TextColor="DarkBlue"/>
+
+							</HorizontalStackLayout>
+
+						</VerticalStackLayout>
+
+					</Border>
+
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+
+		</CollectionView>
+
+		<!-- BOTÓN -->
+		<Button
+            Grid.Row="1"
+            Text="➕ Nueva Matrícula"
+            Clicked="OnAgregarMatriculaClicked"
+            BackgroundColor="Green"
+            TextColor="White"
+            Margin="0,10,0,0"/>
+
+	</Grid>
+
 </ContentPage>

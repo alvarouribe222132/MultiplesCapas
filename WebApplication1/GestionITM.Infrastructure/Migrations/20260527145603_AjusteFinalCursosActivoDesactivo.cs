@@ -5,7 +5,7 @@
 namespace GestionITM.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AgregarColumnaCuposFix : Migration
+    public partial class AjusteFinalCursosActivoDesactivo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

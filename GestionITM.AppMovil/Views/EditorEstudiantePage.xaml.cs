@@ -21,6 +21,7 @@ public partial class EditorEstudiantePage : ContentPage
 		EntryCorreo.Text = estudiante.Correo;
 		EntryTelefono.Text = estudiante.Telefono;
 		EntryDocumento.Text = estudiante.Documento;
+
 	}
 
 	private async void OnGuardarClicked(object sender, EventArgs e)

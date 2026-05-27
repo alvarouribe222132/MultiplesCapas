@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionITM.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260519211242_AgregarColumnaCupos")]
-    partial class AgregarColumnaCupos
+    [Migration("20260527163011_FixEstadoEnCursosYMatriculas")]
+    partial class FixEstadoEnCursosYMatriculas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,12 +44,21 @@ namespace GestionITM.Infrastructure.Migrations
                     b.Property<int>("CuposDisponibles")
                         .HasColumnType("int");
 
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int>("ProfesorId")
+                        .HasColumnType("int");
+
                     b.HasKey("IdCurso");
+
+                    b.HasIndex("ProfesorId");
 
                     b.ToTable("Cursos");
                 });
@@ -196,6 +205,17 @@ namespace GestionITM.Infrastructure.Migrations
                     b.ToTable("Profesors");
                 });
 
+            modelBuilder.Entity("GestionITM.Domain.Entities.Curso", b =>
+                {
+                    b.HasOne("GestionITM.Domain.Entities.Profesor", "Profesor")
+                        .WithMany("Cursos")
+                        .HasForeignKey("ProfesorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Profesor");
+                });
+
             modelBuilder.Entity("GestionITM.Domain.Entities.Matricula", b =>
                 {
                     b.HasOne("GestionITM.Domain.Entities.Curso", "Curso")
@@ -223,6 +243,11 @@ namespace GestionITM.Infrastructure.Migrations
             modelBuilder.Entity("GestionITM.Domain.Entities.Estudiante", b =>
                 {
                     b.Navigation("Matriculas");
+                });
+
+            modelBuilder.Entity("GestionITM.Domain.Entities.Profesor", b =>
+                {
+                    b.Navigation("Cursos");
                 });
 #pragma warning restore 612, 618
         }

@@ -47,12 +47,13 @@ namespace GestionITM.AppMovil.Views
 			//aqui Usamos el operador ? para evitar que truene si es nulo
 			if (profesor == null) return;
 
-			await Alerta("Ver Detalles",
+			await DisplayAlertAsync("Ver Detalles",
 				$"👤 Nombre: {profesor.NombreCompleto}\n" +
 				$"📧 Correo: {profesor.Correo ?? "No asignado"}\n" +
 				$"🎓 Especialidad: {profesor.Especialidad ?? "N/A"}\n" +
-				$"🪪 Documento: {profesor.Documento ?? "Sin Datos"}",
-				$"📞 Teléfono: {profesor.Telefono ?? "Sin Datos"}");
+				$"🪪 Documento: {profesor.Documento ?? "Sin Datos"}\n" +
+				$"📞 Teléfono: {profesor.Telefono ?? "Sin Datos"}",
+				"Cerrar");
 		}
 
 		private async void OnAgregarClicked(object sender, EventArgs e)

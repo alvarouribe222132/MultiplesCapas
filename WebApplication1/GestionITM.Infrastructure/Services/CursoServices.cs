@@ -132,6 +132,8 @@ namespace GestionITM.Infrastructure.Services
 			var totalRegistros = await query.CountAsync();
 
 			var cursosPaginados = await query
+				.Include(c => c.Profesor)
+				.OrderBy(c => c.Nombre)
 				.Skip((filter.Pagina - 1) * filter.RegistrosPorPagina)
 				.Take(filter.RegistrosPorPagina)
 				.ToListAsync();

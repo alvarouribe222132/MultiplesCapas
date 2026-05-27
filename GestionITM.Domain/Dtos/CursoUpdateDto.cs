@@ -19,5 +19,7 @@ namespace GestionITM.Domain.Dtos
 
 		[Range(0, 30)]
 		public int Creditos { get; set; }
+
+		public int ProfesorId { get; set; }
 	}
 }

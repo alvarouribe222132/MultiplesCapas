@@ -41,7 +41,8 @@ namespace GestionITM.AppMovil;
 		builder.Services.AddTransient<MatriculasPage>();
 		builder.Services.AddTransient<EstudiantesViewModel>();
 		builder.Services.AddTransient<MatriculasViewModel>();
-		
+		builder.Services.AddTransient<NuevaMatriculaPage>();
+
 
 		builder.Logging.AddDebug();
 		

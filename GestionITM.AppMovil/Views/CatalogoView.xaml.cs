@@ -86,17 +86,26 @@ namespace GestionITM.AppMovil.Views
 			if (string.IsNullOrWhiteSpace(codigo)) return;
 
 			// Abrir selector de profesor
-			ProfesorModel? profesorSeleccionado = null;
+			//ProfesorModel? profesorSeleccionado = null;
+
+
+			// ABRIR SELECTOR
 			var selectorPage = new SeleccionProfesorPage(_httpClientFactory);
-			selectorPage.ProfesorSeleccionado += profesor =>
-			{
-				profesorSeleccionado = profesor;
-			};
+
+
+			
+			//selectorPage.ProfesorSeleccionado += profesor =>
+			//{
+			//	profesorSeleccionado = profesor;
+			//};
 
 			await Navigation.PushModalAsync(selectorPage);
+			var profesorSeleccionado =	await selectorPage.EsperarSeleccionAsync();
 
 			// Esperar a que el usuario seleccione un profesor
-			await Task.Delay(500);
+			//await Task.Delay(500);
+
+
 			if (profesorSeleccionado == null)
 			{
 				await DisplayAlertAsync("Aviso",
@@ -191,7 +200,87 @@ namespace GestionITM.AppMovil.Views
                 await DisplayAlertAsync("Error", ex.Message, "OK");
             }
         }
-			private async void OnRemainingItemsThresholdReached(object sender, EventArgs? e)
+
+		private async void OnEditarCursoClicked(object sender, EventArgs e)
+		{
+			var curso = (sender as Button)?.BindingContext as CursoDto;
+			if (curso == null) return;
+			// para abrirías una página de edición 
+			await DisplayAlertAsync("Editar", $"Editar curso: {curso.NombreCurso}", "OK");
+		}
+
+		private async void OnInactivarCursoClicked(object sender, EventArgs e)
+		{
+			var curso = (sender as Button)?.BindingContext as CursoDto;
+
+			if (curso == null)
+				return;
+
+			bool confirmar = await DisplayAlertAsync(
+				"Confirmar",
+				"¿Desea inactivar este curso?",
+				"Sí",
+				"No");
+
+			if (!confirmar)
+				return;
+
+			try
+			{
+				var client = _httpClientFactory.CreateClient("GestionITMApi");
+
+				// Enviar actualización al backend
+				var body = new
+				{
+					IdCurso = curso.IdCurso,
+					NombreCurso = curso.NombreCurso,
+					Creditos = curso.Creditos,
+					CuposDisponibles = curso.CuposDisponibles,
+					Codigo = curso.Codigo,
+					NombreProfesor = curso.NombreProfesor,
+					ProfesorId = curso.ProfesorId,
+					Estado = "Inactivo"
+				};
+
+				var response = await client.PutAsJsonAsync(
+					$"Curso/{curso.IdCurso}",
+					body);
+
+				if (response.IsSuccessStatusCode)
+				{
+					await DisplayAlertAsync(
+						"Éxito",
+						"Curso inactivado correctamente",
+						"OK");
+
+					// Recargar lista
+					ListaCursos.Clear();
+					paginaActual = 1;
+
+					await CargarCursos();
+				}
+				else
+				{
+					var error = await response.Content.ReadAsStringAsync();
+
+					await DisplayAlertAsync(
+						"Error",
+						error,
+						"OK");
+				}
+			}
+			catch (Exception ex)
+			{
+				await DisplayAlertAsync(
+					"Error",
+					ex.Message,
+					"OK");
+			}
+		}
+
+		private async void OnRemainingItemsThresholdReached(
+			object sender,
+			EventArgs? e)
 		{
 			await CargarCursos();
 		}

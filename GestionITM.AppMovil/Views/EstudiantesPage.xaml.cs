@@ -90,6 +90,7 @@ namespace GestionITM.AppMovil.Views
 
 			await DisplayAlertAsync("Detalle del Estudiante",
 				$"👤 Nombre: {estudiante.NombreCompleto}\n" +
+				$"📞 Teléfono: {estudiante.Telefono}\n" +
 				$"📧 Correo: {estudiante.Correo}",
 				"Cerrar");
 		}

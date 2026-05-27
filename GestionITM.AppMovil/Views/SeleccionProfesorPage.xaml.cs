@@ -10,8 +10,13 @@ public partial class SeleccionProfesorPage : ContentPage
 	private List<ProfesorModel> _todosLosProfesores = new();
 	private ObservableCollection<ProfesorModel> _profesoresFiltrados = new();
 
-	// Este evento le avisa a CatalogoView qué profesor eligió el usuario
-	public event Action<ProfesorModel>? ProfesorSeleccionado;
+	private readonly TaskCompletionSource<ProfesorModel?> _tcs
+	= new();
+
+	public Task<ProfesorModel?> EsperarSeleccionAsync()
+	{
+		return _tcs.Task;
+	}
 
 	public SeleccionProfesorPage(IHttpClientFactory httpClientFactory)
 	{
@@ -20,6 +25,10 @@ public partial class SeleccionProfesorPage : ContentPage
 		ProfesoresCollection.ItemsSource = _profesoresFiltrados;
 	}
 
+	// Este evento le avisa a CatalogoView qué profesor eligió el usuario
+	//public event Action<ProfesorModel>? ProfesorSeleccionado;
+
+	
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
@@ -63,12 +72,15 @@ public partial class SeleccionProfesorPage : ContentPage
 
 	private async void OnSeleccionarClicked(object sender, EventArgs e)
 	{
-		var button = sender as Button;
-		var profesor = button?.BindingContext as ProfesorModel;
-		if (profesor == null) return;
+		var profesor =(sender as Button)?.BindingContext as ProfesorModel;
 
-		// Avisar a quien abrió esta página qué profesor se seleccionó
-		ProfesorSeleccionado?.Invoke(profesor);
+		if (profesor == null)
+			return;
+
+		// DEVOLVER PROFESOR
+		_tcs.SetResult(profesor);
 		await Navigation.PopModalAsync();
 	}
+
+	
 }

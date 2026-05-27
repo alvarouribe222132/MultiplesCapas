@@ -30,5 +30,7 @@ namespace GestionITM.Domain.Entities
 		public int ProfesorId { get; set; }
 
 		public Profesor? Profesor { get; set; } = null!;
+
+		public string Estado { get; set; } = "Activo";
 	}
 }

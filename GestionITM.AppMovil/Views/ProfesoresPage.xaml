@@ -34,11 +34,12 @@
                                        FontSize="13" TextColor="Gray"/>
 								<Label Text="{Binding Correo}"
                                        FontSize="12" TextColor="DarkBlue"/>
+								<Label Text="{Binding Telefono, StringFormat='📞 {0}'}" FontSize="12" TextColor="Green"/>
 							</VerticalStackLayout>
 
 							<!-- Botones -->
 							<Button Grid.Column="1" Text="👁️"
-                                    BackgroundColor="DarkBlue" TextColor="White"
+                                    BackgroundColor="Blue" TextColor="White"
                                     Clicked="OnVerDetalleClicked" Margin="3,0"/>
 							<Button Grid.Column="2" Text="✏️"
                                     BackgroundColor="Orange" TextColor="White"
@@ -53,7 +54,7 @@
 		</CollectionView>
 		<Button Grid.Row="2" Text="➕ Agregar Profesor"
                 Clicked="OnAgregarClicked"
-                BackgroundColor="Purple" TextColor="White"
+                BackgroundColor="Green" TextColor="White"
                 Margin="0,10,0,0"/>
 
 	</Grid>

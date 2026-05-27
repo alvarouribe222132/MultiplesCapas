@@ -14,5 +14,7 @@ namespace GestionITM.Domain.Dtos
 		public int Creditos { get; set; }
 		public int CuposDisponibles { get; set; }
 		public string NombreProfesor { get; set; } = string.Empty;
+		public string Estado { get; set; } = "Activo";
+		public int ProfesorId { get; set; }
 	}
 }

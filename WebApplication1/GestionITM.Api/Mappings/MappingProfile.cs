@@ -12,7 +12,9 @@ namespace GestionITM.Api.Mappings
 		//para Estudiantes y Profesores, conect
 			CreateMap<Estudiante, EstudianteDto>() //las siguentes 2 loneas se colocan par corregir el problem del mapeo de los ID de los estudiantes
 			.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.EstudianteId))
-			.ForMember(dest => dest.NombreCompleto, opt => opt.MapFrom(src => src.Name));
+			.ForMember(dest => dest.NombreCompleto, opt => opt.MapFrom(src => src.Name))
+			.ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono))
+			.ForMember(dest => dest.Documento, opt => opt.MapFrom(src => src.Documento));
 
 			CreateMap<EstudianteCreateDto, Estudiante>()
 			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Nombre)); // ← conectar Nombre → Name
@@ -24,7 +26,9 @@ namespace GestionITM.Api.Mappings
 
 			//para profesores
 			CreateMap<Profesor, ProfesorDto>()
-			.ForMember(dest => dest.NombreCompleto,	opt => opt.MapFrom(src => src.Name));
+			.ForMember(dest => dest.NombreCompleto,	opt => opt.MapFrom(src => src.Name))
+			.ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono))
+			.ForMember(dest => dest.Documento, opt => opt.MapFrom(src => src.Documento));
 
 			CreateMap<ProfesorCreateDto, Profesor>()
 			.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.NombreCompleto));

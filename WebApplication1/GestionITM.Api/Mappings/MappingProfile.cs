@@ -68,7 +68,7 @@ namespace GestionITM.Api.Mappings
 			.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.NombreCurso));
 
 			CreateMap<CursoUpdateDto, Curso>()
-			.ForMember(dest => dest.Nombre,  opt => opt.MapFrom(src => src.Nombre))
+			.ForMember(dest => dest.Nombre,  opt => opt.MapFrom(src => src.NombreCurso))
 			.ForMember(dest => dest.CuposDisponibles,opt => opt.MapFrom(src => src.CuposDisponibles));
 
 		}

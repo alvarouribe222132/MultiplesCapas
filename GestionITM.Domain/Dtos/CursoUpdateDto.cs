@@ -15,7 +15,7 @@ namespace GestionITM.Domain.Dtos
 
 		[Required]
 		[MaxLength(200)]
-		public string Nombre { get; set; } = string.Empty;
+		public string NombreCurso { get; set; } = string.Empty;
 
 		[Range(0, 30)]
 		public int Creditos { get; set; }
@@ -23,5 +23,7 @@ namespace GestionITM.Domain.Dtos
 		public int ProfesorId { get; set; }
 
 		public int CuposDisponibles { get; set; }
+
+		public string Estado { get; set; } = string.Empty;
 	}
 }

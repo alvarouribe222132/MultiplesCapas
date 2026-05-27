@@ -29,17 +29,17 @@ namespace GestionITM.AppMovil.Views
             CursosCollection.ItemsSource = ListaCursos;
         }
 
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
+		protected override async void OnAppearing()
+		{
+			base.OnAppearing();
 
-            if (ListaCursos.Count == 0)
-            {
-                await CargarCursos();
-            }
-        }
+			ListaCursos.Clear();
+			paginaActual = 1;
 
-        async Task CargarCursos()
+			await CargarCursos();
+		}
+
+		async Task CargarCursos()
         {
             if (cargando)
                 return;
@@ -217,7 +217,11 @@ namespace GestionITM.AppMovil.Views
 			if (curso == null)
 				return;
 
-			bool confirmar = await DisplayAlertAsync("Confirmar", $"¿Inactivar {curso.NombreCurso}?", "Sí","No");
+			bool confirmar = await DisplayAlertAsync(
+				"Confirmar",
+				$"¿Inactivar {curso.NombreCurso}?", 
+				"Sí",
+				"No");
 
 			if (!confirmar)
 				return;
@@ -225,8 +229,6 @@ namespace GestionITM.AppMovil.Views
 			try
 			{
 				var client = _httpClientFactory.CreateClient("GestionITMApi");
-
-
 
 				// Enviar actualización al backend
 				var body = new
@@ -236,28 +238,39 @@ namespace GestionITM.AppMovil.Views
 					Creditos = curso.Creditos,
 					CuposDisponibles = curso.CuposDisponibles,
 					Codigo = curso.Codigo,
-					NombreProfesor = curso.NombreProfesor,
 					ProfesorId = curso.ProfesorId,
 					Estado = "Inactivo"
 				};
 
-				var response = await client.PutAsJsonAsync($"Curso/{curso.IdCurso}",body);
+				var response = await client.PutAsJsonAsync(
+					$"Curso/{curso.IdCurso}",
+					body);
 
 				if (response.IsSuccessStatusCode)
 				{
-					await DisplayAlertAsync("Éxito","Curso inactivado correctamente","OK");
+					curso.Estado = "Inactivo";
+
+					await DisplayAlertAsync(
+						"Éxito",
+						"Curso inactivado correctamente",
+						"OK");
 
 					// Recargar lista
 					ListaCursos.Clear();
 					paginaActual = 1;
 
 					await CargarCursos();
+					CursosCollection.ItemsSource = null;
+					CursosCollection.ItemsSource = ListaCursos;
 				}
 				else
 				{
 					var error = await response.Content.ReadAsStringAsync();
 
-					await DisplayAlertAsync("Error",error,"OK");}
+					await DisplayAlertAsync(
+						"Error",
+						error,
+						"OK");}
 			}
 			catch (Exception ex)
 			{
@@ -270,6 +283,8 @@ namespace GestionITM.AppMovil.Views
 			EventArgs? e)
 		{
 			await CargarCursos();
+			CursosCollection.ItemsSource = null;
+			CursosCollection.ItemsSource = ListaCursos;
 		}
 
 	}

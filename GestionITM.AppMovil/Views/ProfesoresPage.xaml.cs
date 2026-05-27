@@ -9,9 +9,14 @@ namespace GestionITM.AppMovil.Views
 		// Inyectamos el ViewModel por Constructor, para que la pantalla tenga acceso a los datos y comandos.
 		private readonly IHttpClientFactory _httpClientFactory;
 		private readonly ProfesoresViewModel _viewModel;
-		public ProfesoresPage(ProfesoresViewModel viewModel, IHttpClientFactory httpClientFactory)
+		public ProfesoresPage() : this(App.Current!.Handler!.MauiContext!.Services.GetRequiredService<ProfesoresViewModel>(),
+			  App.Current.Handler.MauiContext.Services.GetRequiredService<IHttpClientFactory>())
 		{
-
+		}
+		public ProfesoresPage(
+		ProfesoresViewModel viewModel,
+		IHttpClientFactory httpClientFactory)
+		{
 			InitializeComponent();
 			_viewModel = viewModel;
 			_httpClientFactory = httpClientFactory;
@@ -26,10 +31,10 @@ namespace GestionITM.AppMovil.Views
 			=> MainThread.InvokeOnMainThreadAsync(() => DisplayPromptAsync(titulo, mensaje, initialValue: valorInicial ?? ""));
 
 		private Task<bool> Confirmar(string titulo, string mensaje, string botonSi = "Sí", string botonNo = "No")
-			=> MainThread.InvokeOnMainThreadAsync(() => DisplayAlert(titulo, mensaje, botonSi, botonNo));
+			=> MainThread.InvokeOnMainThreadAsync(() => DisplayAlertAsync(titulo, mensaje, botonSi, botonNo));
 
 		private Task Alerta(string titulo, string mensaje, string v)
-			=> MainThread.InvokeOnMainThreadAsync(() => DisplayAlert(titulo, mensaje, "OK"));
+			=> MainThread.InvokeOnMainThreadAsync(() => DisplayAlertAsync(titulo, mensaje, "OK"));
 		protected override async void OnAppearing()
 		{
 			base.OnAppearing();
@@ -47,7 +52,7 @@ namespace GestionITM.AppMovil.Views
 				$"📧 Correo: {profesor.Correo ?? "No asignado"}\n" +
 				$"🎓 Especialidad: {profesor.Especialidad ?? "N/A"}\n" +
 				$"🪪 Documento: {profesor.Documento ?? "Sin Datos"}",
-				"Cerrar");
+				$"📞 Teléfono: {profesor.Telefono ?? "Sin Datos"}");
 		}
 
 		private async void OnAgregarClicked(object sender, EventArgs e)

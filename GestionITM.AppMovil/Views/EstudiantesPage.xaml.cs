@@ -1,4 +1,5 @@
 ﻿using GestionITM.AppMovil.Models;
+using GestionITM.AppMovil.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,13 +13,16 @@ namespace GestionITM.AppMovil.Views
 		private readonly IHttpClientFactory _httpClientFactory;
 		private ObservableCollection<EstudianteDto> ListaEstudiantes = new();
 
+		public EstudiantesPage() : this(App.Current!.Handler!.MauiContext!.Services.GetRequiredService<IHttpClientFactory>())
+		{
+		}
+
 		public EstudiantesPage(IHttpClientFactory httpClientFactory)
 		{
 			InitializeComponent();
 			_httpClientFactory = httpClientFactory;
 			EstudiantesCollection.ItemsSource = ListaEstudiantes;
 		}
-
 		protected override async void OnAppearing()
 		{
 			base.OnAppearing();
@@ -48,41 +52,9 @@ namespace GestionITM.AppMovil.Views
 			var estudiante = button?.BindingContext as EstudianteDto;
 			if (estudiante == null) return;
 
-			// usando el helper que creamos para pedir el nombre
-			string nuevoNombre = await DisplayPromptAsync("Editar Estudiante", "Nombre completo:", estudiante.NombreCompleto) ?? "";
-			if (string.IsNullOrWhiteSpace(nuevoNombre)) return;
-
-			try
-			{
-				var client = _httpClientFactory.CreateClient("GestionITMApi");
-
-				// se Crea el objeto con los datos actualizados
-				var body = new
-				{
-					Id = estudiante.Id,
-					Nombre = nuevoNombre,
-					Telefono = estudiante.Telefono
-				};
-
-				var response = await client.PutAsJsonAsync($"estudiante/{estudiante.Id}", body);
-
-				if (response.IsSuccessStatusCode)
-				{
-					await DisplayAlertAsync("Éxito", "Estudiante actualizado correctamente", "OK");
-					// Llamar al método del ViewModel para refrescar la lista
-					await CargarEstudiantes();
-				}
-				else
-				{
-					await DisplayAlertAsync("Error", "No se pudo actualizar el estudiante", "OK");
-				}
-			}
-			catch (Exception ex)
-			{
-				await DisplayAlertAsync("Error", ex.Message, "OK");
-			}
+			await Navigation.PushModalAsync(
+				new EditorEstudiantePage(estudiante, _httpClientFactory));
 		}
-
 		private async void OnEliminarClicked(object sender, EventArgs e)
 		{
 			var button = sender as Button;
@@ -108,6 +80,18 @@ namespace GestionITM.AppMovil.Views
 				await DisplayAlertAsync("Error", ex.Message, "OK");
 			}
 
+		}
+
+		private async void OnVerDetalleClicked(object sender, EventArgs e)
+		{
+			var button = sender as Button;
+			var estudiante = button?.BindingContext as EstudianteDto;
+			if (estudiante == null) return;
+
+			await DisplayAlertAsync("Detalle del Estudiante",
+				$"👤 Nombre: {estudiante.NombreCompleto}\n" +
+				$"📧 Correo: {estudiante.Correo}",
+				"Cerrar");
 		}
 		private async void OnAgregarClicked(object sender, EventArgs e)
 		{

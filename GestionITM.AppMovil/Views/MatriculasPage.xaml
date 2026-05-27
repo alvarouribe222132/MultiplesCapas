@@ -1,22 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:GestionITM.AppMovil.Models"
+             xmlns:viewmodels="clr-namespace:GestionITM.AppMovil.ViewModels"
              x:Class="GestionITM.AppMovil.Views.MatriculasPage"
+             x:DataType="viewmodels:MatriculasViewModel"
              Title="Matrículas">
 
-	<CollectionView x:Name="MatriculasCollection" Margin="10">
+	<CollectionView x:Name="MatriculasCollection" 
+                    ItemsSource="{Binding ListaMatriculas}" 
+                    Margin="10">
+
+		<CollectionView.EmptyView>
+			<Label Text="No hay matrículas registradas"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   TextColor="Gray"/>
+		</CollectionView.EmptyView>
+
 		<CollectionView.ItemTemplate>
-			<DataTemplate>
-				<Frame Margin="5" Padding="10" BorderColor="LightGray">
-					<VerticalStackLayout>
+			<DataTemplate x:DataType="models:MatriculaDto">
+				<Border Margin="5" Padding="10" Stroke="LightGray">
+					<Border.StrokeShape>
+						<RoundRectangle CornerRadius="10"/>
+					</Border.StrokeShape>
+
+					<VerticalStackLayout Spacing="2">
 						<Label Text="{Binding NombreEstudiante}"
                                FontSize="16" FontAttributes="Bold"/>
 						<Label Text="{Binding NombreCurso}"
                                FontSize="14" TextColor="Gray"/>
-						<Label Text="{Binding Estado}"
-                               FontSize="12" TextColor="Purple"/>
+						<HorizontalStackLayout Spacing="10">
+							<Label Text="{Binding Estado}"
+                                   FontSize="12" TextColor="Purple"/>
+							<Label Text="{Binding Periodo}"
+                                   FontSize="12" TextColor="DarkBlue"/>
+						</HorizontalStackLayout>
 					</VerticalStackLayout>
-				</Frame>
+				</Border>
 			</DataTemplate>
 		</CollectionView.ItemTemplate>
 	</CollectionView>

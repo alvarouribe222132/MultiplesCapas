@@ -7,12 +7,20 @@ namespace GestionITM.AppMovil
 		public AppShell()
 		{
 			InitializeComponent();
-			Routing.RegisterRoute("catalogo", typeof(CatalogoView));
+			//Routing.RegisterRoute("catalogo", typeof(CatalogoView));
 			//Routing.RegisterRoute("login", typeof(LoginView));
-			Routing.RegisterRoute("profesores", typeof(ProfesoresPage));
-			Routing.RegisterRoute("estudiantes", typeof(EstudiantesPage));
-			Routing.RegisterRoute("matriculas", typeof(MatriculasPage));
+			//Routing.RegisterRoute("profesores", typeof(ProfesoresPage));
+			//Routing.RegisterRoute("estudiantes", typeof(EstudiantesPage));
+			//Routing.RegisterRoute("matriculas", typeof(MatriculasPage));
 
+		}
+		public void ActivarMenuLateral()
+		{
+			FlyoutBehavior = FlyoutBehavior.Flyout;
+			FlyoutProfesores.IsVisible = true;
+			FlyoutEstudiantes.IsVisible = true;
+			FlyoutCursos.IsVisible = true;
+			FlyoutMatriculas.IsVisible = true;
 		}
 	}
 }

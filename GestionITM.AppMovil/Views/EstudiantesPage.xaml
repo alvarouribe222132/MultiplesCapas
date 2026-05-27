@@ -1,44 +1,93 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="GestionITM.AppMovil.Views.EstudiantesPage"
-             Title="Estudiantes ITM">
 
-	<Grid RowDefinitions="*, Auto" Padding="10">
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="GestionITM.AppMovil.Views.EstudiantesPage"
+    Title="Estudiantes ITM">
 
-		<CollectionView x:Name="EstudiantesCollection" Grid.Row="0">
+	<Grid
+        RowDefinitions="*, Auto"
+        Padding="10">
+
+		<!-- LISTA -->
+		<CollectionView
+            x:Name="EstudiantesCollection"
+            Grid.Row="0">
+
 			<CollectionView.ItemTemplate>
+
 				<DataTemplate>
-					<Frame Margin="5" Padding="10" BorderColor="LightGray">
-						<Grid ColumnDefinitions="*, Auto, Auto">
+
+					<Frame
+                        Margin="5"
+                        Padding="10"
+                        BorderColor="LightGray">
+
+						<!-- 4 columnas -->
+						<Grid ColumnDefinitions="*,Auto,Auto,Auto">
+
+							<!-- DATOS -->
 							<VerticalStackLayout Grid.Column="0">
-								<Label Text="{Binding NombreCompleto}"
-                                   FontSize="16" FontAttributes="Bold"/>
-								<Label Text="{Binding Correo}"
-                                   FontSize="13" TextColor="Gray"/>
+
+								<Label
+                                    Text="{Binding NombreCompleto}"
+                                    FontSize="16"
+                                    FontAttributes="Bold"/>
+
+								<Label
+                                    Text="{Binding Correo}"
+                                    FontSize="13"
+                                    TextColor="Gray"/>
+
 							</VerticalStackLayout>
-							<Button Grid.Column="1"
-                                    Text="✏️"
-                                    BackgroundColor="Orange"
-                                    TextColor="White"
-                                    Clicked="OnEditarClicked"
-                                    Margin="5,0"/>
-							<Button Grid.Column="2"
-                                    Text="🗑️"
-                                    BackgroundColor="Red"
-                                    TextColor="White"
-                                    Clicked="OnEliminarClicked"/>
+
+							<!-- VER -->
+							<Button
+                                Grid.Column="1"
+                                Text="👁️"
+                                BackgroundColor="DarkBlue"
+                                TextColor="White"
+                                Clicked="OnVerDetalleClicked"
+                                Margin="3,0"/>
+
+							<!-- EDITAR -->
+							<Button
+                                Grid.Column="2"
+                                Text="✏️"
+                                BackgroundColor="Orange"
+                                TextColor="White"
+                                Clicked="OnEditarClicked"
+                                Margin="3,0"/>
+
+							<!-- ELIMINAR -->
+							<Button
+                                Grid.Column="3"
+                                Text="🗑️"
+                                BackgroundColor="Red"
+                                TextColor="White"
+                                Clicked="OnEliminarClicked"
+                                Margin="3,0"/>
+
 						</Grid>
+
 					</Frame>
+
 				</DataTemplate>
+
 			</CollectionView.ItemTemplate>
+
 		</CollectionView>
 
-		<Button Grid.Row="1"
-                Text="➕Agregar Estudiante"
-                Clicked="OnAgregarClicked"
-				BackgroundColor="Purple"
-                TextColor="White"
-                Margin="0,10,0,0"/>
+		<!-- BOTÓN AGREGAR -->
+		<Button
+            Grid.Row="1"
+            Text="➕ Agregar Estudiante"
+            Clicked="OnAgregarClicked"
+            BackgroundColor="Purple"
+            TextColor="White"
+            Margin="0,10,0,0"/>
+
 	</Grid>
+
 </ContentPage>

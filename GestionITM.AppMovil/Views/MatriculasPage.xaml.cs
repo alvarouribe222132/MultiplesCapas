@@ -1,48 +1,31 @@
-﻿using System;
+﻿using GestionITM.AppMovil.Models;
+using GestionITM.AppMovil.ViewModels;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using GestionITM.AppMovil.Models;
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
+using System.Text;
 
 namespace GestionITM.AppMovil.Views
 {
 	public partial class MatriculasPage : ContentPage
 	{
-		private readonly IHttpClientFactory _httpClientFactory;
-		public ObservableCollection<MatriculaDto> ListaMatriculas { get; set; } = new();
+		private readonly MatriculasViewModel _viewModel;
 
-		public MatriculasPage(IHttpClientFactory httpClientFactory)
+		public MatriculasPage(MatriculasViewModel viewModel)
 		{
 			InitializeComponent();
-			_httpClientFactory = httpClientFactory;
-			BindingContext = this;
+			_viewModel = viewModel;
+			BindingContext = _viewModel; // Aquí conectamos la interfaz con los datos
 		}
 
 		protected override async void OnAppearing()
 		{
 			base.OnAppearing();
-			await CargarMatriculas();
+			// Llamamos al método que está en el ViewModel
+			await _viewModel.CargarMatriculasAsync();
 		}
 
-		async Task CargarMatriculas()
-		{
-			try
-			{
-				var client = _httpClientFactory.CreateClient("GestionITMApi");
-				var lista = await client.GetFromJsonAsync<List<MatriculaDto>>("Matricula");
-				if (lista != null)
-				{
-					ListaMatriculas.Clear();
-					foreach (var m in lista)
-						ListaMatriculas.Add(m);
-				}
-			}
-			catch (Exception ex)
-			{
-				await DisplayAlertAsync("Error", ex.Message, "OK");
-			}
-		}
 	}
 
 }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using GestionITM.AppMovil.Models;
+using GestionITM.AppMovil.ViewModels;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using GestionITM.AppMovil.Models;
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
+using System.Text;
 
 namespace GestionITM.AppMovil.Views
 {
@@ -11,7 +12,11 @@ namespace GestionITM.AppMovil.Views
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-        ObservableCollection<CursoDto> ListaCursos =
+		public CatalogoView() : this(App.Current!.Handler!.MauiContext!.Services.GetRequiredService<IHttpClientFactory>())
+		{
+		}
+
+		ObservableCollection<CursoDto> ListaCursos =
             new ObservableCollection<CursoDto>();
 
         int paginaActual = 1;
@@ -64,16 +69,75 @@ namespace GestionITM.AppMovil.Views
             }
         }
 
-		private async void OnNuevoCursoClicked(object sender, EventArgs e)
+		private async void OnNuevoCursoClicked(object sender, EventArgs? e)
 		{
-			await DisplayAlertAsync("Nuevo Curso","Abrir formulario de creación","OK");
-		}
-		private async void OnRemainingItemsThresholdReached(object? sender, EventArgs e)
-        {
-            await CargarCursos();
-        }
+			string nombre = await DisplayPromptAsync("Nuevo Curso", "Nombre del curso:");
+			if (string.IsNullOrWhiteSpace(nombre)) return;
 
-        private async void OnMatricularClicked(object? sender, EventArgs e)
+			string creditosStr = await DisplayPromptAsync("Nuevo Curso",
+				"Créditos:", keyboard: Keyboard.Numeric);
+			if (!int.TryParse(creditosStr, out int creditos)) return;
+
+			string cuposStr = await DisplayPromptAsync("Nuevo Curso",
+				"Cupos disponibles:", keyboard: Keyboard.Numeric);
+			if (!int.TryParse(cuposStr, out int cupos)) return;
+
+			string codigo = await DisplayPromptAsync("Nuevo Curso", "Código del curso:");
+			if (string.IsNullOrWhiteSpace(codigo)) return;
+
+			// Abrir selector de profesor
+			ProfesorModel? profesorSeleccionado = null;
+			var selectorPage = new SeleccionProfesorPage(_httpClientFactory);
+			selectorPage.ProfesorSeleccionado += profesor =>
+			{
+				profesorSeleccionado = profesor;
+			};
+
+			await Navigation.PushModalAsync(selectorPage);
+
+			// Esperar a que el usuario seleccione un profesor
+			await Task.Delay(500);
+			if (profesorSeleccionado == null)
+			{
+				await DisplayAlertAsync("Aviso",
+					"Debes seleccionar un profesor para continuar", "OK");
+				return;
+			}
+
+			try
+			{
+				var client = _httpClientFactory.CreateClient("GestionITMApi");
+				var body = new
+				{
+					NombreCurso = nombre,
+					Creditos = creditos,
+					CuposDisponibles = cupos,
+					Codigo = codigo,
+					ProfesorId = profesorSeleccionado.ProfesorId
+				};
+
+				var response = await client.PostAsJsonAsync("Curso", body);
+				if (response.IsSuccessStatusCode)
+				{
+					await DisplayAlertAsync("Éxito",
+						$"Curso creado con profesor {profesorSeleccionado.NombreCompleto}", "OK");
+					ListaCursos.Clear();
+					paginaActual = 1;
+					await CargarCursos();
+				}
+				else
+				{
+					var error = await response.Content.ReadAsStringAsync();
+					await DisplayAlertAsync("Error", error, "OK");
+				}
+			}
+			catch (Exception ex)
+			{
+				await DisplayAlertAsync("Error", ex.Message, "OK");
+			}
+		}
+
+		private async void OnMatricularClicked(object? sender, EventArgs e)
         {
             var button = sender as Button;
             var curso = button?.BindingContext as CursoDto;
@@ -90,43 +154,48 @@ namespace GestionITM.AppMovil.Views
             {
                 var client = _httpClientFactory.CreateClient("GestionITMApi");
 
-				var body = new
-				{
-					EstudianteId = 1, // de prueba por el momento, luego se obtiene del contexto de usuario
-					CursoId = cursoId,
-					Periodo = "2025-1"
-				};
+                var body = new
+                {
+                    EstudianteId = 1, // de prueba por el momento, luego se obtiene del contexto de usuario
+                    CursoId = cursoId,
+                    Periodo = "2025-1"
+                };
 
-				var response = await client.PostAsJsonAsync("Matricula", body);
+                var response = await client.PostAsJsonAsync("Matricula", body);
 
-				if (response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     await DisplayAlertAsync("Éxito", "Matrícula realizada", "Genial");
                 }
-                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    await DisplayAlertAsync("Aviso", errorContent, "Entendido");
-                }
-                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    // CORRECCIÓN: DisplayAlert se puede llamar directamente desde
-                    // ContentPage en cualquier contexto. MainThread.InvokeOnMainThreadAsync
-                    // es innecesario aquí y genera advertencias.
-                    await DisplayAlertAsync("Error", "Sesión expirada. Inicia sesión nuevamente", "OK");
-					await Shell.Current.GoToAsync("//login");
+                else {
+				//para leer el mensaje del backend
+					var errorContent = await response.Content.ReadAsStringAsync();
+
+					// Intentar extraer el mensaje del JSON
+					try
+					{
+						var errorObj = System.Text.Json.JsonDocument.Parse(errorContent);
+						var mensaje = errorObj.RootElement
+							.GetProperty("message").GetString();
+						await DisplayAlertAsync("Aviso", mensaje ?? errorContent, "Entendido");
+					}
+					catch
+					{
+						await DisplayAlertAsync("Aviso", errorContent, "Entendido");
+					}
 				}
-                else 
-                {
-					await DisplayAlertAsync("Error", "Algo salió mal. Intenta nuevamente", "OK");
-				}
-            }
+			}
             catch (Exception ex)
             {
                 // CORRECCIÓN: igual que arriba, DisplayAlert directo evita las advertencias.
                 await DisplayAlertAsync("Error", ex.Message, "OK");
             }
-
         }
-    }
+			private async void OnRemainingItemsThresholdReached(object sender, EventArgs? e)
+		{
+			await CargarCursos();
+		}
+
+	}
+    
 }

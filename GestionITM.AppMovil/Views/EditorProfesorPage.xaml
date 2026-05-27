@@ -26,6 +26,14 @@
 		<Label Text="Especialidad"
                FontAttributes="Bold"/>
 
+		<Label Text="Teléfono"
+       FontAttributes="Bold"/>
+
+		<Entry
+        x:Name="EntryTelefono"
+        Keyboard="Telephone"
+        Placeholder="Teléfono"/>
+
 		<Entry
             x:Name="EntryDatoExtra"
             Placeholder="Especialidad"/>

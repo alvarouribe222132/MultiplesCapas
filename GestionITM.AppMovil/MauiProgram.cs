@@ -34,11 +34,14 @@ namespace GestionITM.AppMovil;
 		// ===  INYECCIÓN DE DEPENDENCIAS ===
 		// Usamos AddTransient para que cada vez  que entremos a la pantalla,
 		// nazca una versión fresca y limpia de la vista y de su cerebro (ViewModel).
-
+		builder.Services.AddTransient<LoginView>();
 		builder.Services.AddTransient<ProfesoresPage>();
 		builder.Services.AddTransient<CatalogoView>();
 		builder.Services.AddTransient<EstudiantesPage>();
 		builder.Services.AddTransient<MatriculasPage>();
+		builder.Services.AddTransient<EstudiantesViewModel>();
+		builder.Services.AddTransient<MatriculasViewModel>();
+		
 
 		builder.Logging.AddDebug();
 		

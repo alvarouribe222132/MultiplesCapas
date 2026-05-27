@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestionITM.AppMovil.Views.SeleccionProfesorPage"
+             Title="Seleccionar Profesor">
+
+	<Grid RowDefinitions="Auto, *" Padding="10">
+
+		<!-- Buscador -->
+		<SearchBar Grid.Row="0"
+                   x:Name="SearchBarProfesor"
+                   Placeholder="Buscar por nombre, documento..."
+                   TextChanged="OnBuscarTextChanged"/>
+
+		<!-- Lista de profesores -->
+		<CollectionView Grid.Row="1"
+                        x:Name="ProfesoresCollection">
+			<CollectionView.EmptyView>
+				<Label Text="No se encontraron profesores"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="Gray"/>
+			</CollectionView.EmptyView>
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Border Margin="5" Padding="10" Stroke="LightGray">
+						<Grid ColumnDefinitions="*, Auto">
+							<VerticalStackLayout Grid.Column="0">
+								<Label Text="{Binding NombreCompleto}"
+                                       FontSize="16" FontAttributes="Bold"/>
+								<Label Text="{Binding Especialidad}"
+                                       FontSize="13" TextColor="Gray"/>
+								<Label Text="{Binding Documento}"
+                                       FontSize="12" TextColor="DarkBlue"/>
+							</VerticalStackLayout>
+							<Button Grid.Column="1"
+                                    Text="Seleccionar"
+                                    BackgroundColor="Purple"
+                                    TextColor="White"
+                                    Clicked="OnSeleccionarClicked"/>
+						</Grid>
+					</Border>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+	</Grid>
+</ContentPage>

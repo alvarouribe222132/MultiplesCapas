@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestionITM.AppMovil.Views.EditorEstudiantePage"
+             Title="Editar Estudiante">
+
+	<VerticalStackLayout Padding="20" Spacing="10">
+
+		<Label Text="Nombre Completo" FontAttributes="Bold"/>
+		<Entry x:Name="EntryNombre" Placeholder="Nombre completo"/>
+
+		<Label Text="Correo Electrónico" FontAttributes="Bold"/>
+		<Entry x:Name="EntryCorreo" Keyboard="Email"
+               Placeholder="correo@correo.itm.edu.co"/>
+
+		<Label Text="Teléfono" FontAttributes="Bold"/>
+		<Entry x:Name="EntryTelefono" Keyboard="Telephone"
+               Placeholder="Teléfono"/>
+
+		<Label Text="Documento" FontAttributes="Bold"/>
+		<Entry x:Name="EntryDocumento" Placeholder="Número de documento"/>
+
+		<Button Text="GUARDAR CAMBIOS"
+                Clicked="OnGuardarClicked"
+                BackgroundColor="#512BD4"
+                TextColor="White"/>
+
+		<Button Text="CANCELAR"
+                Clicked="OnCancelarClicked"
+                BackgroundColor="Red"
+                TextColor="White"/>
+
+	</VerticalStackLayout>
+</ContentPage>

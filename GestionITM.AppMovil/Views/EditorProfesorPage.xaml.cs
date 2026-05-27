@@ -19,10 +19,19 @@ public partial class EditorProfesorPage : ContentPage
 		EntryNombre.Text = profesor.NombreCompleto;
 		EntryCorreo.Text = profesor.Correo;
 		EntryDatoExtra.Text = profesor.Especialidad;
+		EntryTelefono.Text = profesor.Telefono;
+
 	}
 
 	private async void OnGuardarClicked(object sender, EventArgs e)
 	{
+		// Validar correo antes de guardar
+		if (!EntryCorreo.Text.EndsWith("@correo.itm.edu.co"))
+		{
+			await DisplayAlertAsync("Correo inválido",
+				"Debes usar @correo.itm.edu.co", "OK");
+			return;
+		}
 		try
 		{
 			var client =
@@ -36,24 +45,19 @@ public partial class EditorProfesorPage : ContentPage
 					NombreCompleto = EntryNombre.Text,
 					Correo = EntryCorreo.Text,
 					Especialidad = EntryDatoExtra.Text,
+					Telefono = EntryTelefono.Text,
 					Documento = _profesor.Documento
+
 				});
 
 			if (response.IsSuccessStatusCode)
 			{
-				await DisplayAlertAsync(
-					"Éxito",
-					"Profesor actualizado",
-					"OK");
-
+				await DisplayAlertAsync("Éxito","Profesor actualizado",	"OK");
 				await Navigation.PopModalAsync();
 			}
 			else
 			{
-				await DisplayAlertAsync(
-					"Error",
-					"No se pudo actualizar",
-					"OK");
+				await DisplayAlertAsync("Error","No se pudo actualizar","OK");
 			}
 		}
 		catch (Exception ex)

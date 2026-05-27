@@ -6,15 +6,14 @@
 	Title="Cursos Disponibles">
 
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="nuevo_curso.png" 
-			Clicked="OnNuevoCursoClicked" 
-			Priority="0" />
+		<ToolbarItem IconImageSource="nuevo_curso.png"
+			Clicked="OnNuevoCursoClicked"  />
 		</ContentPage.ToolbarItems>
 
 	<CollectionView
-        x:Name="CursosCollection"
-        RemainingItemsThreshold="2"
-        RemainingItemsThresholdReached="OnRemainingItemsThresholdReached">
+	x:Name="CursosCollection"  
+	RemainingItemsThreshold="2"
+	RemainingItemsThresholdReached="OnRemainingItemsThresholdReached">
 
 		<CollectionView.ItemTemplate>
 			<DataTemplate x:DataType="models:CursoDto">

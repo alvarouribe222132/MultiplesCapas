@@ -28,29 +28,25 @@ public partial class LoginView : ContentPage
 	{
 		try
 		{
-			var loginData = new
-			{
-				Email = EmailEntry.Text,
-				Password = PassEntry.Text
-			};
-
+			var loginData = new { Email = EmailEntry.Text, Password = PassEntry.Text };
 			var client = _httpClientFactory.CreateClient("GestionITMApi");
-
-			var response = await client.PostAsJsonAsync(
-					"auth/login",
-					loginData);
+			var response = await client.PostAsJsonAsync("auth/login", loginData);
 
 			if (response.IsSuccessStatusCode)
 			{
 				var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+
 				if (result == null || string.IsNullOrEmpty(result.Token))
 				{
+					// Cambiado: DisplayAlert en lugar de DisplayAlertAsync
 					await DisplayAlertAsync("Error", "Token inválido recibido", "OK");
 					return;
 				}
 
-				await SecureStorage.SetAsync("auth_token", result!.Token);
-				Application.Current.MainPage = new AppShell();
+				await SecureStorage.SetAsync("auth_token", result.Token);
+
+				// IMPORTANTE: Cambiar la página principal al AppShell
+				Application.Current!.MainPage = new AppShell();
 			}
 			else
 			{
@@ -59,10 +55,8 @@ public partial class LoginView : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await MainThread.InvokeOnMainThreadAsync(async () =>
-			{
-				await DisplayAlertAsync("Error", ex.Message, "OK");
-			});
+			// Cambiado: DisplayAlert
+			await DisplayAlertAsync("Error", $"No se pudo conectar: {ex.Message}", "OK");
 		}
 	}
 }

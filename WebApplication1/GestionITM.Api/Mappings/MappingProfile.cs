@@ -38,8 +38,9 @@ namespace GestionITM.Api.Mappings
 
 			//para matriculas
 			CreateMap<Matricula, MatriculaDto>()
-			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Curso.Nombre))
-			.ForMember(dest => dest.NombreEstudiante,opt => opt.MapFrom(src => src.Estudiante.Name));
+			.ForMember(dest => dest.NombreCurso, opt => opt.MapFrom(src => src.Curso != null ? src.Curso.Nombre : "N/A"))
+			.ForMember(dest => dest.NombreEstudiante, opt => opt.MapFrom(src => src.Estudiante != null ? src.Estudiante.Name : "N/A"));
+			//AQUI SE AGREGO != null ? src.Estudiante.Name : "Estudiante eliminado" DEBIDO A QUE HACIENDO PRUEBAS HABIA ELIMINADO REGISTROS QUE EN LA BD estaban pero en la App no se mostraban
 
 
 			CreateMap<MatriculaCreateDto, Matricula>();
